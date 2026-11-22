@@ -14,6 +14,15 @@
 #include <vector>
 #include <functional>
 
+#if defined(HAVE_LLAMA_CPP) && HAVE_LLAMA_CPP
+namespace {
+bool s_backendInit = false;
+}
+static void ensureBackendInitPlaceholder() {
+    if (!s_backendInit) { llama_backend_init(); s_backendInit = true; }
+}
+#endif
+
 namespace ModelFit {
 
 struct LlamaBackend::Engine {
@@ -58,7 +67,7 @@ bool LlamaBackend::loadModel(const QString &path, const InferenceConfig &cfg) {
     auto sparams = llama_sampler_chain_default_params();
     llama_sampler * smpl = llama_sampler_chain_init(sparams);
     if (cfg.repeatPenalty != 1.0f) {
-        llama_sampler_chain_add(smpl, llama_sampler_init_penalties(cfg.penaltyLastN, cfg.repeatPenalty, 0.0f, 0.0f));
+        llama_sampler_chain_add(smpl, llama_sampler_init_penalties(llama_vocab_n_tokens(llama_model_get_vocab(m_model)), cfg.penaltyLastN, cfg.repeatPenalty, 0.0f, 0.0f));
     }
     llama_sampler_chain_add(smpl, llama_sampler_init_top_k(cfg.topK));
     llama_sampler_chain_add(smpl, llama_sampler_init_top_p(cfg.topP, 1));
@@ -202,14 +211,7 @@ QString LlamaBackend::chatTemplate(const QString &name) const {
     return {};
 }
 
-// ensureBackendInit helper
-#if defined(HAVE_LLAMA_CPP) && HAVE_LLAMA_CPP
-namespace {
-bool s_backendInit = false;
-}
-static void ensureBackendInitPlaceholder() {
-    if (!s_backendInit) { llama_backend_init(); s_backendInit = true; }
-}
+// ensureBackendInit helper moved to top of file
 #endif
 
 InferenceManager::InferenceManager(QObject *parent) : QObject(parent) {
