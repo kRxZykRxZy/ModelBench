@@ -206,7 +206,7 @@ QList<BackendAvailability> BackendDetector::detect()
             continue;
         }
 
-        const ggml_backend_dev_type type = ggml_backend_dev_type(device);
+        const enum ggml_backend_dev_type type = ggml_backend_dev_type(device);
         const bool gpu = type == GGML_BACKEND_DEVICE_TYPE_GPU
             || type == GGML_BACKEND_DEVICE_TYPE_IGPU
             || type == GGML_BACKEND_DEVICE_TYPE_ACCEL;
