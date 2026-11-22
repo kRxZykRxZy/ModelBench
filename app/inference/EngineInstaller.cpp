@@ -10,6 +10,7 @@
 #include <QStandardPaths>
 #include <QProcess>
 #include <QFileInfo>
+#include <QRegularExpression>
 #include <QDebug>
 
 namespace ModelFit {
@@ -25,9 +26,12 @@ QString EngineInstaller::enginePath() const {
 }
 
 bool EngineInstaller::isInstalled() const {
-    QFileInfo info(enginePath() + "/libllama.dll");
+    // Official Windows binaries ship llama.dll (not libllama.dll).
+    QFileInfo info(enginePath() + "/llama.dll");
+    if (!info.exists()) info.setFile(enginePath() + "/libllama.dll");
 #ifdef Q_OS_MACOS
     info.setFile(enginePath() + "/libllama.dylib");
+    if (!info.exists()) info.setFile(enginePath() + "/llama.dylib");
 #endif
 #ifdef Q_OS_LINUX
     info.setFile(enginePath() + "/libllama.so");
@@ -59,15 +63,52 @@ void EngineInstaller::onLatestReply(QNetworkReply *reply) {
     reply->deleteLater();
     if (!doc.isObject()) { emit latestCheckFailed("Invalid release metadata"); return; }
     QJsonObject o = doc.object();
-    m_latestVersion = o.value("tag_name").toString();
     QJsonArray assets = o.value("assets").toArray();
-    m_latestAssetUrl = selectAsset(assets);
-    m_latestAssetName = m_latestAssetUrl.section('/', -1);
-    if (m_latestAssetUrl.isEmpty()) {
-        emit latestCheckFailed("No compatible release asset found for this platform");
+
+    // The latest stable release (v1.0.0) contains only a nightly-tag.txt.
+    // Binaries live in the nightly release whose tag is in the release body.
+    QString nightlyTag;
+    QString body = o.value("body").toString();
+    QRegularExpression re(QStringLiteral("releases/tag/(b\\d+)"));
+    auto m = re.match(body);
+    if (m.hasMatch()) nightlyTag = m.captured(1);
+
+    if (nightlyTag.isEmpty()) {
+        // Fall back to the selected asset from this release if present.
+        m_latestVersion = o.value("tag_name").toString();
+        m_latestAssetUrl = selectAsset(assets);
+        m_latestAssetName = m_latestAssetUrl.section('/', -1);
+        if (m_latestAssetUrl.isEmpty()) {
+            emit latestCheckFailed("No compatible release asset found for this platform");
+            return;
+        }
+        emit latestChecked(m_latestVersion, m_latestAssetUrl, m_latestAssetName);
         return;
     }
-    emit latestChecked(m_latestVersion, m_latestAssetUrl, m_latestAssetName);
+
+    // Fetch the nightly release that actually has platform binaries.
+    QNetworkRequest req(QUrl("https://api.github.com/repos/ggml-org/llama.cpp/releases/tags/" + nightlyTag));
+    req.setHeader(QNetworkRequest::UserAgentHeader, "ModelFit/0.1");
+    req.setRawHeader("Accept", "application/vnd.github+json");
+    QNetworkReply *nr = m_nam.get(req);
+    connect(nr, &QNetworkReply::finished, this, [this, nr, nightlyTag]() {
+        if (nr->error() != QNetworkReply::NoError) {
+            emit latestCheckFailed(nr->errorString());
+            nr->deleteLater();
+            return;
+        }
+        QJsonDocument ndoc = QJsonDocument::fromJson(nr->readAll());
+        nr->deleteLater();
+        QJsonArray nassets = ndoc.object().value("assets").toArray();
+        m_latestVersion = nightlyTag;
+        m_latestAssetUrl = selectAsset(nassets);
+        m_latestAssetName = m_latestAssetUrl.section('/', -1);
+        if (m_latestAssetUrl.isEmpty()) {
+            emit latestCheckFailed("No compatible release asset found for this platform");
+            return;
+        }
+        emit latestChecked(m_latestVersion, m_latestAssetUrl, m_latestAssetName);
+    });
 }
 
 QString EngineInstaller::selectAsset(const QJsonArray &assets) const {
@@ -85,22 +126,26 @@ QString EngineInstaller::selectAsset(const QJsonArray &assets) const {
     archToken = "arm64";
 #endif
 
-    // Prefer a CPU build for broad compatibility.
-    for (const auto &v : assets) {
-        QJsonObject a = v.toObject();
-        QString name = a.value("name").toString().toLower();
-        if (name.contains(osToken) && name.contains(archToken) &&
-            (name.contains("cpu") || name.contains("bin")) &&
-            name.endsWith(".zip")) {
-            return a.value("browser_download_url").toString();
+    // Prefer a CPU build for broad compatibility (zip on Windows, tar.gz elsewhere).
+    const QStringList exts = (osToken == "win") ? QStringList{"zip"} : QStringList{"tar.gz", "zip"};
+    for (const QString &ext : exts) {
+        for (const auto &v : assets) {
+            QJsonObject a = v.toObject();
+            QString name = a.value("name").toString().toLower();
+            if (name.contains(osToken) && name.contains(archToken) &&
+                name.contains("cpu") && name.endsWith("." + ext)) {
+                return a.value("browser_download_url").toString();
+            }
         }
     }
-    // Fallback: any zip matching os+arch.
-    for (const auto &v : assets) {
-        QJsonObject a = v.toObject();
-        QString name = a.value("name").toString().toLower();
-        if (name.contains(osToken) && name.contains(archToken) && name.endsWith(".zip")) {
-            return a.value("browser_download_url").toString();
+    // Fallback: any archive matching os+arch.
+    for (const QString &ext : exts) {
+        for (const auto &v : assets) {
+            QJsonObject a = v.toObject();
+            QString name = a.value("name").toString().toLower();
+            if (name.contains(osToken) && name.contains(archToken) && name.endsWith("." + ext)) {
+                return a.value("browser_download_url").toString();
+            }
         }
     }
     return {};
@@ -163,9 +208,12 @@ bool EngineInstaller::extractArchive(const QString &archivePath, const QString &
     if (!p.waitForFinished(120000)) return false;
     return p.exitCode() == 0;
 #else
-    // Use unzip.
+    // Use tar for .tar.gz, unzip for .zip.
     QProcess p;
-    p.start("unzip", {"-o", archivePath, "-d", destDir});
+    if (archivePath.endsWith(".tar.gz"))
+        p.start("tar", {"-xzf", archivePath, "-C", destDir});
+    else
+        p.start("unzip", {"-o", archivePath, "-d", destDir});
     if (!p.waitForFinished(120000)) return false;
     return p.exitCode() == 0;
 #endif

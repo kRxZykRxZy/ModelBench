@@ -55,7 +55,7 @@ void TestMcpClient::handshakeAndToolDiscovery() {
     connect(m_client, &MCPClient::toolsDiscovered, this,
             [&](const QList<MCPTool> &t) { tools = t; });
 
-    QVERIFY(m_client->connectStdio("python3", QStringList() << mockServerPath(),
+    QVERIFY(m_client->connectStdio("python", QStringList() << mockServerPath(),
                                    QString(MODELFIT_SOURCE_DIR) + "/tests/mcp"));
 
     QVERIFY(waitFor([&]() { return connected; }, 10000));
@@ -92,7 +92,7 @@ void TestMcpClient::toolCallEcho() {
     connect(m_client, &MCPClient::toolError, this,
             [&](qint64, const QString &, const QString &) { echoError = true; });
 
-    QVERIFY(m_client->connectStdio("python3", QStringList() << mockServerPath(),
+    QVERIFY(m_client->connectStdio("python", QStringList() << mockServerPath(),
                                    QString(MODELFIT_SOURCE_DIR) + "/tests/mcp"));
     QVERIFY(waitFor([&]() { return connected && !tools.isEmpty(); }, 10000));
 
@@ -129,7 +129,7 @@ void TestMcpClient::toolCallInvalidArgs() {
                 m_client->approveToolCall(id, true);
             });
 
-    QVERIFY(m_client->connectStdio("python3", QStringList() << mockServerPath(),
+    QVERIFY(m_client->connectStdio("python", QStringList() << mockServerPath(),
                                    QString(MODELFIT_SOURCE_DIR) + "/tests/mcp"));
     QVERIFY(waitFor([&]() { return connected && !tools.isEmpty(); }, 10000));
 
@@ -156,7 +156,7 @@ void TestMcpClient::requestTimeout() {
                     timeoutMsg = info.message;
             });
 
-    QVERIFY(m_client->connectStdio("python3", QStringList() << mockServerPath(),
+    QVERIFY(m_client->connectStdio("python", QStringList() << mockServerPath(),
                                    QString(MODELFIT_SOURCE_DIR) + "/tests/mcp"));
     QVERIFY(waitFor([&]() { return connected; }, 10000));
 
@@ -177,7 +177,7 @@ void TestMcpClient::cancelRequest() {
     bool connected = false;
     connect(m_client, &MCPClient::connected, this,
             [&]() { connected = true; });
-    QVERIFY(m_client->connectStdio("python3", QStringList() << mockServerPath(),
+    QVERIFY(m_client->connectStdio("python", QStringList() << mockServerPath(),
                                    QString(MODELFIT_SOURCE_DIR) + "/tests/mcp"));
     QVERIFY(waitFor([&]() { return connected; }, 10000));
 
@@ -208,7 +208,7 @@ void TestMcpClient::malformedLine() {
                 if (line.contains("Malformed line")) ++malformedLogs;
             });
 
-    QVERIFY(m_client->connectStdio("python3", QStringList() << mockServerPath(),
+    QVERIFY(m_client->connectStdio("python", QStringList() << mockServerPath(),
                                    QString(MODELFIT_SOURCE_DIR) + "/tests/mcp"));
     QVERIFY(waitFor([&]() { return connected; }, 10000));
     QVERIFY(malformedLogs >= 1);
@@ -235,7 +235,7 @@ void TestMcpClient::serverRequestPing() {
                 }
             });
 
-    QVERIFY(m_client->connectStdio("python3", QStringList() << mockServerPath(),
+    QVERIFY(m_client->connectStdio("python", QStringList() << mockServerPath(),
                                    QString(MODELFIT_SOURCE_DIR) + "/tests/mcp"));
     QVERIFY(waitFor([&]() { return connected; }, 10000));
 
@@ -270,7 +270,7 @@ void TestMcpClient::resourcesAndPrompts() {
                 promptResult = result;
             });
 
-    QVERIFY(m_client->connectStdio("python3", QStringList() << mockServerPath(),
+    QVERIFY(m_client->connectStdio("python", QStringList() << mockServerPath(),
                                    QString(MODELFIT_SOURCE_DIR) + "/tests/mcp"));
     QVERIFY(waitFor([&]() { return connected; }, 10000));
 
@@ -298,7 +298,7 @@ void TestMcpClient::disconnectAndReconnect() {
     connect(m_client, &MCPClient::disconnected, this,
             [&]() { ++disconnects; });
 
-    QVERIFY(m_client->connectStdio("python3", QStringList() << mockServerPath(),
+    QVERIFY(m_client->connectStdio("python", QStringList() << mockServerPath(),
                                    QString(MODELFIT_SOURCE_DIR) + "/tests/mcp"));
     QVERIFY(waitFor([&]() { return connected; }, 10000));
 

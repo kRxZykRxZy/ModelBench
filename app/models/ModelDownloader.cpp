@@ -1,23 +1,31 @@
 #include "ModelDownloader.h"
+#include "core/PathSecurity.h"
+#include "core/Paths.h"
 
 #include <QNetworkRequest>
 #include <QUrl>
 #include <QFileInfo>
+#include <QStandardPaths>
+#include <QDir>
 #include <QDebug>
 
 namespace ModelFit {
 
 ModelDownloader::ModelDownloader(QObject *parent) : QObject(parent) {}
 
+QString ModelDownloader::modelsDirectory() const {
+    return Paths::modelsDirectory();
+}
+
 void ModelDownloader::download(const QString &url, const QString &destPath) {
     if (m_running) return;
     m_running = true;
     m_received = 0;
     m_file.setFileName(destPath);
-    // Resume support: if partial file exists, use Range header
     qint64 existing = 0;
     QFileInfo fi(destPath);
     if (fi.exists()) existing = fi.size();
+    QDir().mkpath(fi.absolutePath());
     if (!m_file.open(QIODevice::Append | QIODevice::WriteOnly)) {
         m_running = false;
         emit failed("Cannot open destination file");
@@ -37,7 +45,8 @@ void ModelDownloader::download(const QString &url, const QString &destPath) {
     });
     connect(m_reply, &QNetworkReply::finished, this, [this, destPath]() {
         if (m_file.isOpen()) m_file.close();
-        if (m_reply->error() != QNetworkReply::NoError) {
+        if (m_reply->error() != QNetworkReply::NoError &&
+            m_reply->error() != QNetworkReply::OperationCanceledError) {
             emit failed(m_reply->errorString());
         } else {
             emit finished(destPath);

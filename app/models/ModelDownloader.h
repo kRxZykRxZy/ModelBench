@@ -11,9 +11,10 @@ class ModelDownloader : public QObject {
     Q_OBJECT
 public:
     explicit ModelDownloader(QObject *parent = nullptr);
-    void download(const QString &url, const QString &destPath);
-    void cancel();
-    bool isRunning() const { return m_running; }
+    Q_INVOKABLE void download(const QString &url, const QString &destPath);
+    Q_INVOKABLE void cancel();
+    Q_INVOKABLE bool isRunning() const { return m_running; }
+    Q_INVOKABLE QString modelsDirectory() const;
 
 signals:
     void progress(qint64 received, qint64 total, double speedBytesPerSec);

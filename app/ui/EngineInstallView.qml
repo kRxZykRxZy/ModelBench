@@ -3,6 +3,8 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 Item {
+    id: root
+    property string engineStatus: "Idle"
     anchors.fill: parent
 
     ColumnLayout {
@@ -38,7 +40,7 @@ Item {
                     Layout.fillWidth: true
                     from: 0; to: 100; value: 0
                 }
-                Text { id: statusText; text: "Idle"; color: Theme.textMuted; font.pixelSize: Theme.fontSizeSm }
+                Text { text: root.engineStatus; color: Theme.textMuted; font.pixelSize: Theme.fontSizeSm }
                 RowLayout {
                     spacing: Theme.sp2
                     Button {
@@ -59,20 +61,20 @@ Item {
             target: engineInstaller
             function onProgress(received, total) {
                 if (total > 0) bar.value = received / total * 100;
-                statusText.text = "Downloading... " + Math.round(received / 1024) + " KB";
+                root.engineStatus = "Downloading... " + Math.round(received / 1024) + " KB";
             }
             function onLatestChecked(version, assetUrl, assetName) {
-                statusText.text = "Latest: " + version + " (" + assetName + ")";
+                root.engineStatus = "Latest: " + version + " (" + assetName + ")";
             }
             function onLatestCheckFailed(error) {
-                statusText.text = "Check failed: " + error;
+                root.engineStatus = "Check failed: " + error;
             }
             function onFinished(version, path) {
-                statusText.text = "Installed " + version;
+                root.engineStatus = "Installed " + version;
                 bar.value = 100;
             }
             function onFailed(error) {
-                statusText.text = "Failed: " + error;
+                root.engineStatus = "Failed: " + error;
             }
         }
     }

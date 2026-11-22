@@ -5,6 +5,7 @@ import QtQuick.Layouts
 Item {
     id: root
     property var hw: app.hardwareInfo()
+    property string settingsStatus: ""
 
     ScrollView {
         anchors.fill: parent

@@ -4,6 +4,7 @@ import QtQuick.Layouts
 
 Item {
     id: root
+    property string statusMessage: ""
 
     function refresh() { serverList.model = mcpServers.getServers() }
 
@@ -43,13 +44,13 @@ Item {
                         mcpServers.addServerConfig(nameField.text.trim(), transportCombo.currentText,
                                                    cmdField.text.trim(), "", urlField.text.trim())
                         nameField.text = ""; cmdField.text = ""; urlField.text = ""
-                        statusText.text = "Server added"
+                        root.statusMessage = "Server added"
                     }
                 }
             }
         }
 
-        Text { id: statusText; text: ""; color: Theme.success; font.pixelSize: Theme.fontSizeSm }
+        Text { text: root.statusMessage; color: Theme.success; font.pixelSize: Theme.fontSizeSm }
 
         Text { text: "Configured Servers"; color: Theme.text; font.bold: true; font.pixelSize: Theme.fontSizeLg }
 
@@ -75,11 +76,11 @@ Item {
                     }
                     Button {
                         text: "Connect"
-                        onClicked: { mcpServers.connectServerQml(modelData.id); statusText.text = "Connecting to " + modelData.name }
+                        onClicked: { mcpServers.connectServerQml(modelData.id); root.statusMessage = "Connecting to " + modelData.name }
                     }
                     Button {
                         text: "Remove"
-                        onClicked: { mcpServers.removeServer(modelData.id); statusText.text = "Removed" }
+                        onClicked: { mcpServers.removeServer(modelData.id); root.statusMessage = "Removed" }
                     }
                 }
             }

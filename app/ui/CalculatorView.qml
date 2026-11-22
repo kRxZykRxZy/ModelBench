@@ -5,6 +5,7 @@ import QtQuick.Layouts
 Item {
     id: root
     property var hw: app.hardwareInfo()
+    property string resultTextValue: "Enter a model spec and press Calculate Fit."
 
     function calculate() {
         var params = parseFloat(paramsField.text) || 7
@@ -24,7 +25,7 @@ Item {
         var ramGB = (root.hw.ramBytes || 0) / 1073741824
         var vramGB = (root.hw.vramBytes || 0) / 1073741824
         var fits = estGB <= ramGB * 0.85
-        resultText.text =
+        resultTextValue =
             "Estimated RAM: " + estGB.toFixed(1) + " GB\n" +
             "Available RAM: " + ramGB.toFixed(1) + " GB\n" +
             "Fits in RAM: " + (fits ? "YES" : "NO") + "\n" +
@@ -84,7 +85,7 @@ Item {
                     anchors.margins: Theme.sp2
                     Text {
                         id: resultText
-                        text: "Enter a model spec and press Calculate Fit."
+                        text: root.resultTextValue
                         color: Theme.text
                         font.pixelSize: Theme.fontSizeMd
                         lineHeight: 1.5
