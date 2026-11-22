@@ -1,0 +1,21 @@
+# ModelFit ignore rules
+build/
+*.user
+*.autosave
+CMakeFiles/
+CMakeCache.txt
+*.o
+*.obj
+*.exe
+*.pdb
+*.ilk
+*.log
+.DS_Store
+Thumbs.db
+**/secrets/
+*.bin
+moc_*.cpp
+qrc_*.cpp
+ui_*.h
+*.gguf
+third_party/llama.cpp/build/
