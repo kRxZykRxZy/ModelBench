@@ -8,6 +8,8 @@ Item {
     property string selectedModelId: ""
     property string statusText: "Ready"
     property var modelFiles: []
+    property var downloadedModels: ({})
+    property string pendingDownloadModel: ""
 
     function doSearch() {
         root.statusText = "Searching..."
@@ -38,7 +40,15 @@ Item {
         function onProgress(received, total) {
             if (total > 0) root.statusText = "Downloading: " + Math.round(received/total*100) + "%"
         }
-        function onFinished(path) { root.statusText = "Download complete: " + path }
+        function onFinished(path) {
+            root.statusText = "Download complete: " + path
+            if (root.pendingDownloadModel) {
+                var m = root.downloadedModels
+                m[root.pendingDownloadModel] = path
+                root.downloadedModels = m
+                root.pendingDownloadModel = ""
+            }
+        }
         function onFailed(err) { root.statusText = "Download failed: " + err }
     }
 
@@ -101,17 +111,19 @@ Item {
                         }
                     }
                     Button {
-                        text: "Download"
+                        text: root.downloadedModels[modelData.id] ? "Load" : "Download"
                         onClicked: {
-                            root.selectedModelId = modelData.id
-                            hfClient.fetchModelFiles(modelData.id)
-                        }
-                    }
-                    Button {
-                        text: "Load"
-                        onClicked: {
-                            var base = "https://huggingface.co/" + modelData.id + "/resolve/main/"
-                            root.statusText = "Press Download to get a GGUF, then load the local file."
+                            var localPath = root.downloadedModels[modelData.id]
+                            if (localPath) {
+                                if (inference.loadModelFile(localPath)) {
+                                    root.statusText = "Loaded: " + localPath.split('/').pop()
+                                } else {
+                                    root.statusText = "Failed to load " + localPath
+                                }
+                            } else {
+                                root.selectedModelId = modelData.id
+                                hfClient.fetchModelFiles(modelData.id)
+                            }
                         }
                     }
                 }
@@ -212,6 +224,7 @@ Item {
                                 var url = "https://huggingface.co/" + root.selectedModelId + "/resolve/main/" + modelData.name
                                 var dest = downloader.modelsDirectory() + "/" + fileName
                                 root.statusText = "Downloading " + fileName + "..."
+                                root.pendingDownloadModel = root.selectedModelId
                                 downloader.download(url, dest)
                                 fileDialog.close()
                             }
