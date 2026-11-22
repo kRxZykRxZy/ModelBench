@@ -4,32 +4,22 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QJsonArray>
+#include <QVariantList>
 
 namespace ModelFit {
-
-struct HFModel {
-    QString id;
-    QString author;
-    QString sha;
-    qint64 downloads = 0;
-    qint64 likes = 0;
-    QStringList tags;
-    QString pipelineTag;
-    QString lastModified;
-};
 
 class HuggingFaceClient : public QObject {
     Q_OBJECT
 public:
     explicit HuggingFaceClient(QObject *parent = nullptr);
-    void setToken(const QString &token);
-    void searchModels(const QString &query, int limit = 20);
-    void fetchModelFiles(const QString &repoId);
+    Q_INVOKABLE void setToken(const QString &token);
+    Q_INVOKABLE void searchModels(const QString &query, int limit = 20);
+    Q_INVOKABLE void fetchModelFiles(const QString &repoId);
 
 signals:
-    void searchFinished(const QList<HFModel> &models);
+    void searchFinished(const QVariantList &models);
     void searchFailed(const QString &error);
-    void filesFinished(const QString &repoId, const QJsonArray &files);
+    void filesFinished(const QString &repoId, const QVariantList &files);
     void filesFailed(const QString &repoId, const QString &error);
 
 private:

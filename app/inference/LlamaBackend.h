@@ -119,10 +119,17 @@ public:
 
     LlamaBackend *backend() { return &m_backend; }
     bool loadModel(const QString &path, const InferenceConfig &cfg);
+    Q_INVOKABLE bool loadModelFile(const QString &path);
     void unloadModel();
+    Q_INVOKABLE void unloadModelQml() { unloadModel(); }
     bool isModelLoaded() const;
+    Q_INVOKABLE bool isLoaded() const { return isModelLoaded(); }
     void generate(const QString &prompt, const InferenceConfig &cfg);
+    Q_INVOKABLE void generateText(const QString &prompt);
     void cancel();
+    Q_INVOKABLE void cancelGeneration() { cancel(); }
+    Q_INVOKABLE int contextUsed() const;
+    Q_INVOKABLE int contextCapacity() const;
 
     QString formatChat(const QList<ChatTurn> &messages,
                        const QString &tmplOverride = {},

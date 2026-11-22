@@ -121,8 +121,7 @@ QList<SecurityWarning> SkillsManager::scanPath(const QString &dir) {
     return warnings;
 }
 
-void SkillsManager::installSkill(const QString &sourcePath,
-                                 const QString &id) {
+void SkillsManager::installSkill(const QString &sourcePath, const QString &id) {
     QFileInfo srcInfo(sourcePath);
     if (!srcInfo.exists() || !srcInfo.isDir()) {
         emit skillError(id.isEmpty() ? sourcePath : id,
@@ -354,6 +353,20 @@ void SkillsManager::saveState() {
     if (!file.open(QIODevice::WriteOnly)) return;
     file.write(QJsonDocument(arr).toJson(QJsonDocument::Indented));
     file.close();
+}
+
+QVariantList SkillsManager::getInstalled() const {
+    QVariantList out;
+    for (const auto &s : m_skills) {
+        QVariantMap m;
+        m["id"] = s.id;
+        m["name"] = s.name;
+        m["description"] = s.description;
+        m["enabled"] = s.enabled;
+        m["path"] = s.path;
+        out << m;
+    }
+    return out;
 }
 
 } // namespace ModelFit

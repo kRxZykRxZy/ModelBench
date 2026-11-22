@@ -67,7 +67,7 @@ bool LlamaBackend::loadModel(const QString &path, const InferenceConfig &cfg) {
     auto sparams = llama_sampler_chain_default_params();
     llama_sampler * smpl = llama_sampler_chain_init(sparams);
     if (cfg.repeatPenalty != 1.0f) {
-        llama_sampler_chain_add(smpl, llama_sampler_init_penalties(llama_vocab_n_tokens(llama_model_get_vocab(m_model)), cfg.penaltyLastN, cfg.repeatPenalty, 0.0f, 0.0f));
+        llama_sampler_chain_add(smpl, llama_sampler_init_penalties(llama_vocab_n_tokens(llama_model_get_vocab(e.model)), cfg.penaltyLastN, cfg.repeatPenalty, 0.0f, 0.0f));
     }
     llama_sampler_chain_add(smpl, llama_sampler_init_top_k(cfg.topK));
     llama_sampler_chain_add(smpl, llama_sampler_init_top_p(cfg.topP, 1));
@@ -221,10 +221,22 @@ InferenceManager::InferenceManager(QObject *parent) : QObject(parent) {
 }
 
 bool InferenceManager::loadModel(const QString &path, const InferenceConfig &cfg) { return m_backend.loadModel(path, cfg); }
+bool InferenceManager::loadModelFile(const QString &path) {
+    InferenceConfig cfg;
+    cfg.modelPath = path;
+    return m_backend.loadModel(path, cfg);
+}
 void InferenceManager::unloadModel() { m_backend.unloadModel(); }
 bool InferenceManager::isModelLoaded() const { return m_backend.isLoaded(); }
 void InferenceManager::generate(const QString &prompt, const InferenceConfig &cfg) { m_backend.generate(prompt, cfg); }
+void InferenceManager::generateText(const QString &prompt) {
+    InferenceConfig cfg;
+    cfg.maxTokens = 512;
+    m_backend.generate(prompt, cfg);
+}
 void InferenceManager::cancel() { m_backend.cancel(); }
+int InferenceManager::contextUsed() const { return m_backend.contextManager().used(); }
+int InferenceManager::contextCapacity() const { return m_backend.contextManager().capacity(); }
 QString InferenceManager::formatChat(const QList<ChatTurn> &messages, const QString &tmplOverride, bool addAssistant) const { return m_backend.formatChat(messages, tmplOverride, addAssistant); }
 QString InferenceManager::chatTemplate(const QString &name) const { return m_backend.chatTemplate(name); }
 

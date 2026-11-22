@@ -40,9 +40,12 @@ public:
     void setStoragePath(const QString &path);
 
     // Configuration
-    void addServer(const MCPServerConfig &cfg);
-    void removeServer(const QString &id);
-    void setEnabled(const QString &id, bool enabled);
+    Q_INVOKABLE void addServer(const MCPServerConfig &cfg);
+    Q_INVOKABLE void addServerConfig(const QString &name, const QString &transport,
+                                     const QString &command, const QString &args, const QString &url);
+    Q_INVOKABLE QVariantList getServers() const;
+    Q_INVOKABLE void removeServer(const QString &id);
+    Q_INVOKABLE void setEnabled(const QString &id, bool enabled);
     bool isEnabled(const QString &id) const;
     void setAutoReconnect(const QString &id, bool enabled);
 
@@ -50,6 +53,8 @@ public:
     void connectServer(const QString &id);
     void disconnectServer(const QString &id);
     void restartServer(const QString &id);
+    Q_INVOKABLE void connectServerQml(const QString &id) { connectServer(id); }
+    Q_INVOKABLE void disconnectServerQml(const QString &id) { disconnectServer(id); }
 
     // Inspection
     MCPClient *client(const QString &id) const;

@@ -18,9 +18,9 @@ Item {
             Layout.fillWidth: true
             ColumnLayout {
                 spacing: Theme.sp2
-                Text { text: "Installed: " + (engineInstaller.isInstalled() ? "Yes" : "No"); color: Theme.text }
-                Text { text: "Version: " + (engineInstaller.installedVersion() || "—"); color: Theme.textMuted }
-                Text { text: "Path: " + engineInstaller.enginePath(); color: Theme.textMuted; font.pixelSize: Theme.fontSizeXs; wrapMode: Text.Wrap; Layout.fillWidth: true }
+                Text { text: "Installed: " + (engineInstaller.getIsInstalled() ? "Yes" : "No"); color: Theme.text }
+                Text { text: "Version: " + (engineInstaller.getInstalledVersion() || "—"); color: Theme.textMuted }
+                Text { text: "Path: " + engineInstaller.getEnginePath(); color: Theme.textMuted; font.pixelSize: Theme.fontSizeXs; wrapMode: Text.Wrap; Layout.fillWidth: true }
             }
         }
 
@@ -43,12 +43,12 @@ Item {
                     spacing: Theme.sp2
                     Button {
                         text: "Install"
-                        enabled: !engineInstaller.isInstalled()
+                        enabled: !engineInstaller.getIsInstalled()
                         onClicked: engineInstaller.install()
                     }
                     Button {
                         text: "Uninstall"
-                        enabled: engineInstaller.isInstalled()
+                        enabled: engineInstaller.getIsInstalled()
                         onClicked: engineInstaller.uninstall()
                     }
                 }

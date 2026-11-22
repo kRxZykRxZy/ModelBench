@@ -4,6 +4,8 @@
 #include "core/Logging.h"
 #include "storage/Database.h"
 #include "inference/EngineInstaller.h"
+#include "billing/SubscriptionManager.h"
+#include "hardware/HardwareDetector.h"
 
 #include <QDir>
 #include <QStandardPaths>
@@ -21,6 +23,14 @@ bool Application::initialize() {
     if (!initLogging()) return false;
     if (!initDatabase()) return false;
     m_engineInstaller = new EngineInstaller(this);
+    m_theme = new Theme(this);
+    m_inference = new InferenceManager(this);
+    m_conversations = new ConversationManager(this);
+    m_hfClient = new HuggingFaceClient(this);
+    m_downloader = new ModelDownloader(this);
+    m_mcpServers = new MCPServerManager(this);
+    m_skills = new SkillsManager(this);
+    m_subscription = new SubscriptionManager(this);
     emit initialized();
     return true;
 }
@@ -47,11 +57,25 @@ bool Application::initDatabase() {
 }
 
 void Application::registerQmlTypes(QQmlApplicationEngine &engine) {
-    engine.rootContext()->setContextProperty("engineInstaller", m_engineInstaller);
+    QQmlContext *ctx = engine.rootContext();
+    ctx->setContextProperty("engineInstaller", m_engineInstaller);
+    ctx->setContextProperty("Theme", m_theme);
+    ctx->setContextProperty("inference", m_inference);
+    ctx->setContextProperty("conversations", m_conversations);
+    ctx->setContextProperty("hfClient", m_hfClient);
+    ctx->setContextProperty("downloader", m_downloader);
+    ctx->setContextProperty("mcpServers", m_mcpServers);
+    ctx->setContextProperty("skills", m_skills);
+    ctx->setContextProperty("subscription", m_subscription);
+    ctx->setContextProperty("app", this);
 }
 
 QString Application::dataDirectory() const { return m_dataDir; }
 QString Application::modelsDirectory() const { return m_modelsDir; }
 QString Application::logsDirectory() const { return m_logsDir; }
+
+QVariantMap Application::hardwareInfo() const {
+    return HardwareDetector::toJson(HardwareDetector::detect()).toVariantMap();
+}
 
 } // namespace ModelFit

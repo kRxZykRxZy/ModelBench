@@ -39,9 +39,11 @@ public:
 
     // Install a skill by copying a source directory tree recursively into
     // skillsDir/<id>. If id is empty, the source directory name is used.
-    void installSkill(const QString &sourcePath, const QString &id = {});
-    void uninstallSkill(const QString &id);
+    Q_INVOKABLE void installSkill(const QString &sourcePath, const QString &id = {});
+    Q_INVOKABLE void uninstallSkill(const QString &id);
+    Q_INVOKABLE void setSkillEnabled(const QString &id, bool enabled) { setEnabled(id, enabled); }
     void setEnabled(const QString &id, bool enabled);
+    Q_INVOKABLE QVariantList getInstalled() const;
     bool isEnabled(const QString &id) const;
 
     QList<Skill> installed() const { return m_skills; }

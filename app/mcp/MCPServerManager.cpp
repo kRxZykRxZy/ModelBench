@@ -148,6 +148,32 @@ void MCPServerManager::addServer(const MCPServerConfig &cfg) {
     emit configsChanged();
 }
 
+void MCPServerManager::addServerConfig(const QString &name, const QString &transport,
+                                       const QString &command, const QString &args, const QString &url) {
+    MCPServerConfig c;
+    c.name = name;
+    c.transport = transport;
+    c.command = command;
+    c.args = args.split(' ', Qt::SkipEmptyParts);
+    c.url = url;
+    addServer(c);
+}
+
+QVariantList MCPServerManager::getServers() const {
+    QVariantList out;
+    for (const auto &c : m_servers) {
+        QVariantMap m;
+        m["id"] = c.id;
+        m["name"] = c.name;
+        m["transport"] = c.transport;
+        m["command"] = c.command;
+        m["url"] = c.url;
+        m["enabled"] = c.enabled;
+        out << m;
+    }
+    return out;
+}
+
 void MCPServerManager::removeServer(const QString &id) {
     disconnectServer(id);
     m_clients.remove(id);

@@ -12,16 +12,19 @@ class EngineInstaller : public QObject {
 public:
     explicit EngineInstaller(QObject *parent = nullptr);
 
+    Q_INVOKABLE bool isInstalled() const;
+    Q_INVOKABLE QString installedVersion() const;
     QString installRoot() const;
     QString enginePath() const;
-    bool isInstalled() const;
-    QString installedVersion() const;
+    Q_INVOKABLE QString getEnginePath() const { return enginePath(); }
+    Q_INVOKABLE bool getIsInstalled() const { return isInstalled(); }
+    Q_INVOKABLE QString getInstalledVersion() const { return installedVersion(); }
 
     // Fetch latest release metadata from GitHub and select an asset URL.
-    void checkLatest();
+    Q_INVOKABLE void checkLatest();
     // Download + extract the selected asset. Emits progress.
-    void install();
-    void uninstall();
+    Q_INVOKABLE void install();
+    Q_INVOKABLE void uninstall();
 
 signals:
     void latestChecked(const QString &version, const QString &assetUrl, const QString &assetName);

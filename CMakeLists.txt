@@ -38,6 +38,7 @@ set(MODELFIT_SOURCES
     app/core/Paths.cpp
     app/core/Logging.cpp
     app/core/PathSecurity.cpp
+    app/core/Theme.cpp
     app/storage/Database.cpp
     app/storage/Repositories.cpp
     app/storage/SecretStorage.cpp
@@ -70,6 +71,7 @@ set(MODELFIT_HEADERS
     app/core/Paths.h
     app/core/Logging.h
     app/core/PathSecurity.h
+    app/core/Theme.h
     app/storage/Database.h
     app/storage/Repositories.h
     app/storage/SecretStorage.h
@@ -130,26 +132,22 @@ if(MODELFIT_ENABLE_LLAMA_CPP)
     endif()
 endif()
 
-qt_policy(SET QTP0001 OLD)
-qt_policy(SET QTP0004 OLD)
-
 qt_add_qml_module(ModelFit
     URI ModelFit
     VERSION 1.0
     QML_FILES
         app/ui/Main.qml
-        app/ui/themes/Theme.qml
-        app/ui/components/Sidebar.qml
-        app/ui/components/HeaderBar.qml
-        app/ui/views/HomeView.qml
-        app/ui/views/ChatView.qml
-        app/ui/views/ModelsView.qml
-        app/ui/views/EngineInstallView.qml
-        app/ui/views/CalculatorView.qml
-        app/ui/views/McpHubView.qml
-        app/ui/views/SkillsHubView.qml
-        app/ui/views/SettingsView.qml
-        app/ui/views/SubscriptionView.qml
+        app/ui/Sidebar.qml
+        app/ui/HeaderBar.qml
+        app/ui/HomeView.qml
+        app/ui/ChatView.qml
+        app/ui/ModelsView.qml
+        app/ui/EngineInstallView.qml
+        app/ui/CalculatorView.qml
+        app/ui/McpHubView.qml
+        app/ui/SkillsHubView.qml
+        app/ui/SettingsView.qml
+        app/ui/SubscriptionView.qml
 )
 
 install(TARGETS ModelFit RUNTIME DESTINATION bin)

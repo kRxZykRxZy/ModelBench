@@ -6,7 +6,6 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
-#include <QDebug>
 
 namespace ModelFit {
 
@@ -40,19 +39,16 @@ void HuggingFaceClient::searchModels(const QString &query, int limit) {
         }
         QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
         reply->deleteLater();
-        QList<HFModel> out;
+        QVariantList out;
         if (doc.isArray()) {
             for (const auto &v : doc.array()) {
                 QJsonObject o = v.toObject();
-                HFModel m;
-                m.id = o.value("id").toString();
-                m.author = o.value("author").toString();
-                m.sha = o.value("sha").toString();
-                m.downloads = o.value("downloads").toVariant().toLongLong();
-                m.likes = o.value("likes").toVariant().toLongLong();
-                m.pipelineTag = o.value("pipeline_tag").toString();
-                m.lastModified = o.value("lastModified").toString();
-                for (const auto &t : o.value("tags").toArray()) m.tags << t.toString();
+                QVariantMap m;
+                m["id"] = o.value("id").toString();
+                m["author"] = o.value("author").toString();
+                m["downloads"] = o.value("downloads").toVariant().toLongLong();
+                m["likes"] = o.value("likes").toVariant().toLongLong();
+                m["pipeline"] = o.value("pipeline_tag").toString();
                 out << m;
             }
         }
@@ -71,8 +67,17 @@ void HuggingFaceClient::fetchModelFiles(const QString &repoId) {
         }
         QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
         reply->deleteLater();
-        QJsonArray arr = doc.isArray() ? doc.array() : QJsonArray();
-        emit filesFinished(repoId, arr);
+        QVariantList out;
+        if (doc.isArray()) {
+            for (const auto &v : doc.array()) {
+                QJsonObject o = v.toObject();
+                QVariantMap f;
+                f["name"] = o.value("path").toString();
+                f["size"] = o.value("size").toVariant().toLongLong();
+                out << f;
+            }
+        }
+        emit filesFinished(repoId, out);
     });
 }
 
