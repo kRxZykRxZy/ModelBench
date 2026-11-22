@@ -211,9 +211,6 @@ QString LlamaBackend::chatTemplate(const QString &name) const {
     return {};
 }
 
-// ensureBackendInit helper moved to top of file
-#endif
-
 InferenceManager::InferenceManager(QObject *parent) : QObject(parent) {
     connect(&m_backend, &LlamaBackend::tokenGenerated, this, &InferenceManager::tokenGenerated);
     connect(&m_backend, &LlamaBackend::generationFinished, this, &InferenceManager::generationFinished);
