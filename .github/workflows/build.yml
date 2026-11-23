@@ -22,6 +22,12 @@ jobs:
         run: cmake --preset windows-mingw-debug -DCMAKE_PREFIX_PATH=C:/Qt/6.8.3/mingw_64
       - name: Build
         run: cmake --build --preset windows-mingw-debug
+      - name: Upload ModelBench.exe
+        uses: actions/upload-artifact@v4
+        with:
+          name: ModelBench-windows
+          path: build/windows-mingw-debug/ModelBench.exe
+          if-no-files-found: error
 
   macos-arm64:
     runs-on: macos-latest
@@ -34,8 +40,14 @@ jobs:
       - name: Install aqtinstall
         run: pip install aqtinstall
       - name: Install Qt
-        run: aqt install-qt mac desktop 6.8.3 clang_64 -O /opt/Qt
+        run: sudo aqt install-qt mac desktop 6.8.3 clang_64 -O /opt/Qt
       - name: Configure
         run: cmake --preset macos-arm64 -DCMAKE_PREFIX_PATH=/opt/Qt/6.8.3/macos
       - name: Build
         run: cmake --build --preset macos-arm64
+      - name: Upload ModelBench macOS
+        uses: actions/upload-artifact@v4
+        with:
+          name: ModelBench-macos
+          path: build/macos-arm64/ModelBench.app
+          if-no-files-found: warn
