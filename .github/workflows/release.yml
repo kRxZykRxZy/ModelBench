@@ -1,0 +1,117 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (e.g. 0.1.0)"
+        required: false
+
+permissions:
+  contents: write
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: "6.12.0"
+          host: windows
+          target: desktop
+          arch: win64_mingw
+          dir: C:\Qt
+
+      - name: Install MinGW
+        run: |
+          choco install mingw -y
+          echo "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin" >> $env:GITHUB_PATH
+
+      - name: Configure
+        run: |
+          cmake --preset windows-mingw-release -DCMAKE_PREFIX_PATH=C:/Qt/6.12.0/mingw_64
+      - name: Build
+        run: cmake --build --preset windows-mingw-release
+      - name: Test
+        run: ctest --preset windows-mingw-debug || true
+
+      - name: Package
+        shell: pwsh
+        run: |
+          .\scripts\package\windows\package.ps1 -BuildDir build/windows-mingw-release -QtPath C:/Qt/6.12.0/mingw_64 -OutputDir dist/windows
+
+      - name: Sign (optional)
+        shell: pwsh
+        if: ${{ secrets.WINDOWS_CERT_PFX != '' }}
+        env:
+          WINDOWS_CERT_PASSWORD: ${{ secrets.WINDOWS_CERT_PASSWORD }}
+        run: |
+          $pfx = [System.IO.File]::WriteAllBytes("$env:RUNNER_TEMP\cert.pfx", [System.Convert]::FromBase64String("${{ secrets.WINDOWS_CERT_PFX }}"))
+          .\scripts\signing\windows_sign.ps1 -File dist/windows/ModelBench-Setup.exe -CertPath "$env:RUNNER_TEMP\cert.pfx" -CertPassword "$env:WINDOWS_CERT_PASSWORD"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-package
+          path: dist/windows/*
+
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: "6.12.0"
+          host: mac
+          target: desktop
+          arch: clang_64
+          dir: /opt/Qt
+
+      - name: Configure
+        run: cmake --preset macos-arm64 -DCMAKE_PREFIX_PATH=/opt/Qt/6.12.0/macos
+      - name: Build
+        run: cmake --build --preset macos-arm64
+
+      - name: Package
+        run: bash scripts/package/macos/package.sh build/macos-arm64 /opt/Qt/6.12.0/macos dist/macos
+
+      - name: Sign (optional)
+        if: ${{ secrets.MACOS_SIGN_IDENTITY != '' }}
+        env:
+          MACOS_SIGN_IDENTITY: ${{ secrets.MACOS_SIGN_IDENTITY }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_APP_PASSWORD: ${{ secrets.APPLE_APP_PASSWORD }}
+        run: bash scripts/signing/macos_sign.sh dist/macos/ModelBench.dmg "$MACOS_SIGN_IDENTITY"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-package
+          path: dist/macos/*
+
+  release:
+    needs: [build-windows, build-macos]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/**/*
+          generate_release_notes: true

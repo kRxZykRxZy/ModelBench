@@ -9,6 +9,9 @@ ModelBench is a native local AI workstation for Windows and macOS.
 - Skills.sh integration
 - Embedded subscription billing (Whop)
 - Local OpenAI-compatible API server
+- Agent mode with tool registry, approval gate and memory
+- Git integration (status, diff, commit, branch, push, pull)
+- Credits and subscription billing (Whop)
 
 ## Status
 

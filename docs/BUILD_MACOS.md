@@ -27,3 +27,9 @@ cmake --build --preset macos-arm64
 - Keychain used for secret storage.
 - Universal binary only if all native deps (incl. llama.cpp) support both arches.
 - Not verified on this Windows dev machine; CI required.
+
+## Packaging
+```
+scripts/package/macos/package.sh build/macos-arm64 /opt/Qt/6.12.0/macos dist/macos
+```
+Produces `ModelBench.app` and `ModelBench.dmg` in `dist/macos/`.

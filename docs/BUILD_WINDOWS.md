@@ -34,3 +34,9 @@ git submodule update --init --recursive
 cmake --preset windows-mingw-debug -DMODELFIT_ENABLE_LLAMA_CPP=ON
 ```
 Requires the submodule and a compatible build of llama.cpp.
+
+## Packaging
+```
+scripts/package/windows/package.ps1 -BuildDir build/windows-mingw-release -QtPath C:/Qt/6.12.0/mingw_64
+```
+Produces portable zip and (if NSIS installed) an installer in `dist/windows/`.

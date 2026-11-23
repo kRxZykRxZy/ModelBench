@@ -7,6 +7,8 @@ Item {
     property string currentConvId: ""
     property string currentResponse: ""
     property var messages: []
+    property bool agentMode: false
+    property var agentSteps: []
 
     function loadConversations() {
         convList.model = conversations.getConversations()
@@ -25,6 +27,7 @@ Item {
     function newChat() {
         currentConvId = conversations.createConversation("New chat", "")
         currentResponse = ""
+        agentSteps = []
         loadConversations()
         loadMessages()
     }
@@ -37,12 +40,46 @@ Item {
         conversations.addMessage(currentConvId, "user", text)
         currentResponse = ""
         loadMessages()
-        if (inference.isLoaded()) {
+        if (agentMode) {
+            root.startAgentFlow(text)
+        } else if (inference.isLoaded()) {
             inference.generateText(text)
         } else {
             currentResponse = "[No model loaded. Load a model in the Models view to chat.]"
             finishResponse()
         }
+    }
+
+    function startAgentFlow(prompt) {
+        agentSteps = [
+            { id: "step-1", tool: "run_terminal", status: "running", args: { command: "echo 'planning...'" }, requiresApproval: true, ago: "just now" },
+            { id: "step-2", tool: "read_file", status: "pending", args: { path: "src/main.cpp" }, requiresApproval: true, ago: "" },
+            { id: "step-3", tool: "write_file", status: "pending", args: { path: "src/out.txt", content: "..." }, requiresApproval: true, ago: "" }
+        ]
+        // TODO(agent-1): wire to the real orchestrator/tool signals once available.
+        inference.generateText(prompt)
+    }
+
+    function approveAgentStep(stepId) {
+        for (var i = 0; i < agentSteps.length; i++) {
+            if (agentSteps[i].id === stepId) {
+                agentSteps[i].status = "approved"
+                agentSteps[i].ago = "just now"
+                break
+            }
+        }
+        agentSteps = agentSteps.slice()
+    }
+
+    function denyAgentStep(stepId) {
+        for (var i = 0; i < agentSteps.length; i++) {
+            if (agentSteps[i].id === stepId) {
+                agentSteps[i].status = "denied"
+                agentSteps[i].ago = "just now"
+                break
+            }
+        }
+        agentSteps = agentSteps.slice()
     }
 
     function finishResponse() {
@@ -150,7 +187,7 @@ Item {
                         text: inference.isLoaded() ? "Stop" : "Load model"
                         onClicked: {
                             if (inference.isLoaded()) inference.cancelGeneration()
-                            else window.currentView = "models"
+                            else Navigation.go("models")
                         }
                     }
                 }
@@ -216,6 +253,29 @@ Item {
                 }
             }
 
+            // Agent timeline
+            Rectangle {
+                Layout.fillWidth: true
+                visible: root.agentMode && root.agentSteps.length > 0
+                Layout.preferredHeight: 200
+                color: Theme.bgElevated
+                border.color: Theme.border
+                border.width: 1
+                ColumnLayout {
+                    anchors.fill: parent
+                    anchors.margins: Theme.sp2
+                    spacing: Theme.sp1
+                    Text { text: "Agent steps"; color: Theme.textMuted; font.pixelSize: Theme.fontSizeXs; font.bold: true }
+                    AgentTimeline {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        steps: root.agentSteps
+                        onApproveStep: root.approveAgentStep
+                        onDenyStep: root.denyAgentStep
+                    }
+                }
+            }
+
             // Composer
             Rectangle {
                 Layout.fillWidth: true
@@ -227,11 +287,18 @@ Item {
                     anchors.fill: parent
                     anchors.margins: Theme.sp3
                     spacing: Theme.sp2
+                    Button {
+                        text: agentMode ? "Agent: ON" : "Agent: OFF"
+                        checkable: true
+                        checked: agentMode
+                        font.pixelSize: Theme.fontSizeXs
+                        onToggled: (checked) => { root.agentMode = checked }
+                    }
                     TextArea {
                         id: textInput
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        placeholderText: "Message ModelBench..."
+                        placeholderText: agentMode ? "Agent task..." : "Message ModelBench..."
                         wrapMode: TextArea.Wrap
                         font.pixelSize: Theme.fontSizeMd
                         color: Theme.text

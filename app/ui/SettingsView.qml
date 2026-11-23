@@ -68,7 +68,7 @@ Item {
                     spacing: Theme.sp2
                     Text { text: engineInstaller.getIsInstalled() ? ("Installed: " + engineInstaller.getInstalledVersion()) : "Not installed"; color: Theme.textMuted; font.pixelSize: Theme.fontSizeSm }
                     Text { text: engineInstaller.getEnginePath(); color: Theme.textSubtle; font.pixelSize: Theme.fontSizeXs; wrapMode: Text.Wrap; Layout.fillWidth: true }
-                    Button { text: "Open Engine Installer"; onClicked: window.currentView = "engine" }
+                    Button { text: "Open Engine Installer"; onClicked: Navigation.go("engine") }
                 }
             }
 

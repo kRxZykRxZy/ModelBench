@@ -22,7 +22,6 @@ Rectangle {
                     case "chat": return "Chat";
                     case "models": return "Models";
                     case "engine": return "Engine";
-                    case "calculator": return "Model Fit Calculator";
                     case "mcp": return "MCP Hub";
                     case "skills": return "Skills Hub";
                     case "settings": return "Settings";
@@ -46,7 +45,7 @@ Rectangle {
             Text { anchors.centerIn: parent; text: Theme.dark ? "L" : "D"; color: Theme.text; font.pixelSize: Theme.fontSizeMd }
             MouseArea {
                 anchors.fill: parent; cursorShape: Qt.PointingHandCursor
-                onClicked: Theme.mode = Theme.dark ? "light" : "dark"
+                onClicked: { /* theme toggle — light mode not yet implemented */ }
             }
         }
     }

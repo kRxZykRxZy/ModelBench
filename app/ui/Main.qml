@@ -22,8 +22,8 @@ ApplicationWindow {
             Layout.preferredWidth: compact ? 64 : 240
             Layout.fillHeight: true
             compact: window.width < 1100
-            currentView: window.currentView
-            onViewSelected: (v) => window.currentView = v
+            currentView: Navigation.currentView
+            onViewSelected: (v) => Navigation.go(v)
         }
 
         ColumnLayout {
@@ -34,13 +34,13 @@ ApplicationWindow {
             HeaderBar {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 52
-                currentView: window.currentView
+                currentView: Navigation.currentView
             }
 
             StackLayout {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                currentIndex: viewIndex(window.currentView)
+                currentIndex: viewIndex(Navigation.currentView)
 
                 HomeView { }
                 ChatView { }
@@ -51,6 +51,9 @@ ApplicationWindow {
                 SettingsView { }
                 LoginView { }
                 SubscriptionView { }
+                GitView { }
+                CreditsView { }
+                OnboardingWizard { }
             }
         }
     }
@@ -66,6 +69,9 @@ ApplicationWindow {
             case "settings": return 6;
             case "account": return 7;
             case "subscription": return 8;
+            case "git": return 9;
+            case "credits": return 10;
+            case "onboarding": return 11;
         }
         return 0;
     }

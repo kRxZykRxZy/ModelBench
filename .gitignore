@@ -19,3 +19,9 @@ qrc_*.cpp
 ui_*.h
 *.gguf
 third_party/llama.cpp/build/
+node_modules/
+.env
+server/node_modules/
+server/.env
+*.tsbuildinfo
+

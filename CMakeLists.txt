@@ -30,7 +30,7 @@ set(CMAKE_AUTOUIC ON)
 find_package(Qt6 6.8 REQUIRED COMPONENTS
     Core Gui Widgets Quick QuickControls2 Network Sql Concurrent Test)
 
-option(MODELFIT_ENABLE_LLAMA_CPP "Build with embedded llama.cpp" ON)
+option(MODELFIT_ENABLE_LLAMA_CPP "Build with embedded llama.cpp" OFF)
 
 set(MODELFIT_SOURCES
     app/main.cpp
@@ -40,18 +40,32 @@ set(MODELFIT_SOURCES
     app/core/PathSecurity.cpp
     app/core/Theme.cpp
     app/core/AccountManager.cpp
+    app/core/Updater.cpp
     app/storage/Database.cpp
     app/storage/Repositories.cpp
     app/storage/SecretStorage.cpp
+    app/storage/VectorStore.cpp
+    app/storage/CodeIndexer.cpp
     app/hardware/HardwareDetector.cpp
     app/hardware/BackendDetector.cpp
     app/models/HuggingFaceClient.cpp
     app/models/ModelRegistry.cpp
     app/models/ModelDownloader.cpp
     app/models/ModelDownloads.cpp
-    app/models/ModelDownloads.cpp
     app/chat/ConversationManager.cpp
     app/chat/ChatOrchestrator.cpp
+    app/agent/AgentMemory.cpp
+    app/agent/AgentPlanner.cpp
+    app/agent/AgentOrchestrator.cpp
+    app/tools/ToolApproval.cpp
+    app/tools/ToolRegistry.cpp
+    app/tools/FileSystemTools.cpp
+    app/tools/TerminalTool.cpp
+    app/tools/GitTools.cpp
+    app/tools/FileEditHistory.cpp
+    app/tools/CodeRunner.cpp
+    app/tools/FileWatcher.cpp
+    app/tools/SystemIntegration.cpp
     app/inference/LlamaBackend.cpp
     app/inference/ChatTemplate.cpp
     app/inference/ContextManager.cpp
@@ -75,9 +89,12 @@ set(MODELFIT_HEADERS
     app/core/PathSecurity.h
     app/core/Theme.h
     app/core/AccountManager.h
+    app/core/Updater.h
     app/storage/Database.h
     app/storage/Repositories.h
     app/storage/SecretStorage.h
+    app/storage/VectorStore.h
+    app/storage/CodeIndexer.h
     app/hardware/HardwareDetector.h
     app/hardware/BackendDetector.h
     app/models/HuggingFaceClient.h
@@ -85,6 +102,18 @@ set(MODELFIT_HEADERS
     app/models/ModelDownloader.h
     app/chat/ConversationManager.h
     app/chat/ChatOrchestrator.h
+    app/agent/AgentMemory.h
+    app/agent/AgentPlanner.h
+    app/agent/AgentOrchestrator.h
+    app/tools/ToolApproval.h
+    app/tools/ToolRegistry.h
+    app/tools/FileSystemTools.h
+    app/tools/TerminalTool.h
+    app/tools/GitTools.h
+    app/tools/FileEditHistory.h
+    app/tools/CodeRunner.h
+    app/tools/FileWatcher.h
+    app/tools/SystemIntegration.h
     app/inference/LlamaBackend.h
     app/inference/ChatTemplate.h
     app/inference/ContextManager.h
@@ -119,6 +148,14 @@ if(WIN32)
     target_link_libraries(ModelBench PRIVATE crypt32)
 endif()
 
+# Optional OpenSSL for update signature verification.
+find_package(OpenSSL QUIET)
+if(OpenSSL_FOUND)
+    target_compile_definitions(ModelBench PRIVATE HAVE_OPENSSL=1)
+    target_link_libraries(ModelBench PRIVATE OpenSSL::Crypto)
+    target_include_directories(ModelBench PRIVATE ${OPENSSL_INCLUDE_DIR})
+endif()
+
 if(MODELFIT_ENABLE_LLAMA_CPP)
     target_compile_definitions(ModelBench PRIVATE HAVE_LLAMA_CPP=1)
     if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/llama.cpp/CMakeLists.txt")
@@ -138,6 +175,7 @@ qt_add_qml_module(ModelBench
     URI ModelBench
     VERSION 1.0
     QML_FILES
+        app/ui/Navigation.qml
         app/ui/Main.qml
         app/ui/Sidebar.qml
         app/ui/HeaderBar.qml
@@ -150,9 +188,38 @@ qt_add_qml_module(ModelBench
         app/ui/SettingsView.qml
         app/ui/LoginView.qml
         app/ui/SubscriptionView.qml
+        app/ui/AgentTimeline.qml
+        app/ui/GitView.qml
+        app/ui/CreditsView.qml
+        app/ui/OnboardingWizard.qml
+        app/ui/components/TerminalView.qml
+        app/ui/components/CodeRunnerView.qml
 )
 
 install(TARGETS ModelBench RUNTIME DESTINATION bin)
+
+# ---- Packaging (CPack) ----
+set(CPACK_PACKAGE_NAME "ModelBench")
+set(CPACK_PACKAGE_VENDOR "ModelBench")
+set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Local-first LLM workbench")
+set(CPACK_PACKAGE_HOMEPAGE_URL "https://github.com/kRxZykRxZy/ModelBench")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/assets/icon.ico")
+    set(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}/assets/icon.ico")
+endif()
+if(WIN32)
+    set(CPACK_GENERATOR "NSIS;ZIP")
+    set(CPACK_NSIS_DISPLAY_NAME "ModelBench")
+    set(CPACK_NSIS_PACKAGE_NAME "ModelBench")
+    set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
+elseif(APPLE)
+    set(CPACK_GENERATOR "DragNDrop;TGZ")
+    set(CPACK_DMG_VOLUME_NAME "ModelBench")
+else()
+    set(CPACK_GENERATOR "TGZ")
+endif()
+include(CPack)
 
 enable_testing()
 add_subdirectory(tests)

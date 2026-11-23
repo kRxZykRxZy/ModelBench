@@ -117,8 +117,9 @@ void MCPClient::disconnect() {
     if (m_connected) {
         m_connected = false;
         m_handshakeDone = false;
+        if (m_reconnectTransport == MCPTransport::None)
+            m_reconnectTransport = MCPTransport::Stdio;
         m_transport = MCPTransport::None;
-        m_reconnectTransport = MCPTransport::None;
         emit disconnected();
     }
 }
@@ -154,6 +155,12 @@ void MCPClient::setDefaultTimeoutMs(int ms) {
 // ---------------------------------------------------------------------------
 
 bool MCPClient::startStdio() {
+    if (m_proc.state() != QProcess::NotRunning) {
+        m_proc.terminate();
+        if (!m_proc.waitForFinished(2000))
+            m_proc.kill();
+        m_proc.waitForFinished(1000);
+    }
     m_proc.setWorkingDirectory(m_stdioWorkingDir);
     m_proc.start(m_stdioCommand, m_stdioArgs);
     if (!m_proc.waitForStarted(5000)) {
@@ -855,8 +862,9 @@ void MCPClient::fail(const QString &message, MCPClientError code) {
     if (m_connected) {
         m_connected = false;
         m_handshakeDone = false;
+        if (m_reconnectTransport == MCPTransport::None)
+            m_reconnectTransport = MCPTransport::Stdio;
         m_transport = MCPTransport::None;
-        m_reconnectTransport = MCPTransport::None;
         emit disconnected();
     }
     if (!m_intentionalDisconnect && m_autoReconnect &&

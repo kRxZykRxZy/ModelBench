@@ -1,0 +1,21 @@
+{
+  "windows": {
+    "certificatePfx": "path/to/codesign.pfx",
+    "certificatePasswordEnv": "WINDOWS_CERT_PASSWORD",
+    "timestampUrl": "http://timestamp.digicert.com",
+    "signtoolPath": "C:/Program Files (x86)/Windows Kits/10/bin/10.0.22621.0/x64/signtool.exe"
+  },
+  "macos": {
+    "identity": "Developer ID Application: Your Name (TEAMID)",
+    "notarization": {
+      "appleIdEnv": "APPLE_ID",
+      "appPasswordEnv": "APPLE_APP_PASSWORD",
+      "teamIdEnv": "APPLE_TEAM_ID"
+    }
+  },
+  "updateSigning": {
+    "algorithm": "Ed25519",
+    "privateKeyPath": "secrets/update-signing.key",
+    "publicKeyPemEmbedded": "app/core/Updater.cpp::publicKeyPem()"
+  }
+}

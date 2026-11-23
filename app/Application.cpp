@@ -2,6 +2,7 @@
 
 #include "core/Paths.h"
 #include "core/Logging.h"
+#include "core/Updater.h"
 #include "storage/Database.h"
 #include "inference/EngineInstaller.h"
 #include "billing/SubscriptionManager.h"
@@ -32,6 +33,13 @@ bool Application::initialize() {
     m_mcpServers = new MCPServerManager(this);
     m_skills = new SkillsManager(this);
     m_subscription = new SubscriptionManager(this);
+    m_updater = new Updater(this);
+    m_agent = new AgentOrchestrator(nullptr, nullptr, this);
+    m_terminalSession = new TerminalSession(this);
+    m_codeRunner = new CodeRunner(this);
+    m_fileWatcher = new FileWatcher(this);
+    m_clipboard = new Clipboard(this);
+    m_notifier = new Notifier(this);
     emit initialized();
     return true;
 }
@@ -69,6 +77,16 @@ void Application::registerQmlTypes(QQmlApplicationEngine &engine) {
     ctx->setContextProperty("mcpServers", m_mcpServers);
     ctx->setContextProperty("skills", m_skills);
     ctx->setContextProperty("subscription", m_subscription);
+    ctx->setContextProperty("updater", m_updater);
+    // Credits balance is provided by the backend; expose a placeholder until a
+    // dedicated credits service is wired up so QML references resolve safely.
+    ctx->setContextProperty("credits", nullptr);
+    ctx->setContextProperty("agent", m_agent);
+    ctx->setContextProperty("terminalSession", m_terminalSession);
+    ctx->setContextProperty("codeRunner", m_codeRunner);
+    ctx->setContextProperty("fileWatcher", m_fileWatcher);
+    ctx->setContextProperty("clipboard", m_clipboard);
+    ctx->setContextProperty("notifier", m_notifier);
     ctx->setContextProperty("app", this);
 }
 

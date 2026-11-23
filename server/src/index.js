@@ -1,32 +1,24 @@
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
+import './env.js';
+import { createApp } from './app.js';
+import { isConfigured } from './lib/supabase.js';
 
-dotenv.config();
+const app = createApp();
+const port = Number(process.env.PORT || 3000);
 
-import { authRouter } from './routes/auth.js';
-import { billingRouter } from './routes/billing.js';
-import { userRouter } from './routes/user.js';
-
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-// CORS: allow the desktop app (and localhost dev) to call the API
-app.use(cors({
-  origin: (origin, cb) => cb(null, true),
-  credentials: true
-}));
-
-// Webhook needs raw body for signature verification
-app.use('/billing/webhook', express.raw({ type: 'application/json' }));
-app.use(express.json());
-
-app.get('/health', (req, res) => res.json({ ok: true, service: 'modelbench-server' }));
-
-app.use('/auth', authRouter);
-app.use('/user', userRouter);
-app.use('/billing', billingRouter);
-
-app.listen(PORT, () => {
-  console.log(`ModelBench server listening on http://localhost:${PORT}`);
+const server = app.listen(port, () => {
+  console.log(`ModelBench server listening on http://localhost:${port}`);
+  console.log(`  database: ${isConfigured() ? 'Supabase' : 'mock (in-memory)'}`);
+  console.log(`  cloud AI: ${process.env.OPENROUTER_API_KEY && process.env.AI_MOCK !== 'true' ? 'OpenRouter' : 'mock'}`);
+  console.log(`  billing:  ${process.env.WHOP_API_KEY ? 'Whop' : 'mock'}`);
 });
+
+function shutdown(signal) {
+  console.log(`\n${signal} received, shutting down...`);
+  server.close(() => process.exit(0));
+  setTimeout(() => process.exit(1), 10_000).unref();
+}
+
+process.on('SIGINT', () => shutdown('SIGINT'));
+process.on('SIGTERM', () => shutdown('SIGTERM'));
+
+export { app, server };

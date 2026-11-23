@@ -141,60 +141,7 @@ Item {
             }
         }
 
-        // Downloaded models
-        Text { text: "Downloaded Models"; color: Theme.text; font.bold: true; font.pixelSize: Theme.fontSizeLg }
-        Rectangle {
-            Layout.fillWidth: true
-            Layout.preferredHeight: 130
-            radius: Theme.radiusMd
-            color: Theme.panel
-            border.color: Theme.border
-            border.width: 1
-            ColumnLayout {
-                anchors.fill: parent
-                anchors.margins: Theme.sp2
-                spacing: Theme.sp1
-                Text { text: "Local GGUF files in " + downloader.modelsDirectory(); color: Theme.textMuted; font.pixelSize: Theme.fontSizeXs; wrapMode: Text.Wrap; Layout.fillWidth: true }
-                ListView {
-                    id: localList
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    clip: true
-                    model: downloader.listDownloadedModels()
-                    delegate: Rectangle {
-                        width: localList.width
-                        implicitHeight: 40
-                        color: "transparent"
-                        border.color: Theme.border
-                        border.width: 1
-                        RowLayout {
-                            anchors.fill: parent
-                            anchors.margins: Theme.sp2
-                            Text {
-                                Layout.fillWidth: true
-                                text: modelData.split('/').pop()
-                                color: Theme.text
-                                font.pixelSize: Theme.fontSizeSm
-                                elide: Text.ElideRight
-                            }
-                            Button {
-                                text: "Load"
-                                onClicked: {
-                                    if (inference.loadModelFile(modelData)) {
-                                        root.statusText = "Loaded " + modelData.split('/').pop()
-                                    } else {
-                                        root.statusText = "Failed to load " + modelData.split('/').pop() + " — rebuild with llama.cpp ON"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        // Load local file
-        // Downloaded models
+        // Load local file / Downloaded models
         Rectangle {
             Layout.fillWidth: true
             Layout.preferredHeight: 140

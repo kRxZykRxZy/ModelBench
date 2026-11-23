@@ -46,7 +46,7 @@ QString EngineInstaller::installedVersion() const {
 }
 
 void EngineInstaller::checkLatest() {
-    QNetworkRequest req(QUrl("https://api.github.com/repos/ggml-org/llama.cpp/releases/latest"));
+    QNetworkRequest req{QUrl("https://api.github.com/repos/ggml-org/llama.cpp/releases/latest")};
     req.setHeader(QNetworkRequest::UserAgentHeader, "ModelBench/0.1");
     req.setRawHeader("Accept", "application/vnd.github+json");
     QNetworkReply *reply = m_nam.get(req);
@@ -87,7 +87,7 @@ void EngineInstaller::onLatestReply(QNetworkReply *reply) {
     }
 
     // Fetch the nightly release that actually has platform binaries.
-    QNetworkRequest req(QUrl("https://api.github.com/repos/ggml-org/llama.cpp/releases/tags/" + nightlyTag));
+    QNetworkRequest req{QUrl("https://api.github.com/repos/ggml-org/llama.cpp/releases/tags/" + nightlyTag)};
     req.setHeader(QNetworkRequest::UserAgentHeader, "ModelBench/0.1");
     req.setRawHeader("Accept", "application/vnd.github+json");
     QNetworkReply *nr = m_nam.get(req);

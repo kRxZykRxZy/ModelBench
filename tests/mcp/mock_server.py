@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 """Mock stdio MCP server for testing ModelBench's MCPClient.
 
 Implements: initialize, notifications/initialized, tools/list, tools/call,
@@ -110,6 +110,7 @@ def handle(msg):
         if name == "echo":
             text = args.get("text", "")
             result = {"content": [{"type": "text", "text": text}]}
+            error = None
         elif name == "add":
             a = args.get("a")
             b = args.get("b")
@@ -120,12 +121,19 @@ def handle(msg):
                     "message": "Invalid params: a and b are required",
                 }
             else:
-                result = {
-                    "content": [
-                        {"type": "text", "text": str(float(a) + float(b))}
-                    ]
-                }
-                error = None
+                try:
+                    result = {
+                        "content": [
+                            {"type": "text", "text": str(float(a) + float(b))}
+                        ]
+                    }
+                    error = None
+                except (TypeError, ValueError):
+                    result = None
+                    error = {
+                        "code": -32602,
+                        "message": "Invalid params: a and b must be numbers",
+                    }
         elif name == "slow":
             delay = float(params.get("arguments", {}).get("sleep", 2))
             time.sleep(delay)
@@ -195,7 +203,7 @@ def main():
                 malformed_sent = True
                 sys.stdout.write("this is not valid json\r\n")
                 sys.stdout.flush()
-                continue
+                # Fall through to handle the request normally.
 
         try:
             msg = json.loads(line)

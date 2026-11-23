@@ -37,7 +37,7 @@ signals:
 
 private:
     void postJson(const QString &path, const QJsonObject &body, std::function<void(QJsonObject,bool)> cb);
-    QString m_serverUrl = "https://your-site-url.example.com";
+    QString m_serverUrl = "http://localhost:3000";
     QString m_accessToken;
     QString m_email;
     QString m_tier = "free";

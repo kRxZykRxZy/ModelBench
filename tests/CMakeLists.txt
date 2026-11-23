@@ -14,6 +14,12 @@ set(COMMON_TEST_DEPS
     ${CMAKE_SOURCE_DIR}/app/core/Paths.cpp
     ${CMAKE_SOURCE_DIR}/app/core/Logging.cpp
     ${CMAKE_SOURCE_DIR}/app/core/PathSecurity.cpp
+    ${CMAKE_SOURCE_DIR}/app/storage/VectorStore.cpp
+    ${CMAKE_SOURCE_DIR}/app/storage/VectorStore.h
+    ${CMAKE_SOURCE_DIR}/app/storage/CodeIndexer.cpp
+    ${CMAKE_SOURCE_DIR}/app/storage/CodeIndexer.h
+    ${CMAKE_SOURCE_DIR}/app/agent/AgentMemory.cpp
+    ${CMAKE_SOURCE_DIR}/app/agent/AgentMemory.h
 )
 
 set(COMMON_TEST_LIBS Qt6::Core Qt6::Test Qt6::Network Qt6::Sql Qt6::Concurrent)
@@ -32,3 +38,20 @@ add_modelfit_test(test_mcp_jsonrpc unit/test_mcp_jsonrpc.cpp)
 add_modelfit_test(test_inference inference/test_inference.cpp)
 add_modelfit_test(test_mcp_client mcp/test_mcp_client.cpp)
 add_modelfit_test(test_tool_calling mcp/test_tool_calling.cpp)
+add_modelfit_test(test_tool_calling_integration mcp/test_tool_calling_integration.cpp)
+add_modelfit_test(test_agent_tool_loop mcp/test_agent_tool_loop.cpp)
+add_modelfit_test(test_memory memory/test_memory.cpp)
+
+add_subdirectory(account)
+add_subdirectory(tools)
+add_subdirectory(agent)
+
+# Optional Node.js-based integration test for the credits deduction flow.
+find_program(MODELFIT_NODE_EXECUTABLE node)
+if(MODELFIT_NODE_EXECUTABLE)
+    add_test(NAME test_credits_flow
+             COMMAND ${MODELFIT_NODE_EXECUTABLE}
+                     ${CMAKE_SOURCE_DIR}/tests/integration/test_credits_flow.js)
+    set_tests_properties(test_credits_flow PROPERTIES
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+endif()

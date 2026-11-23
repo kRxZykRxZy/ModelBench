@@ -72,7 +72,6 @@ Item {
                     model: [
                         { label: "New Chat", view: "chat" },
                         { label: "Models", view: "models" },
-                        { label: "Model Fit Calculator", view: "calculator" },
                         { label: "Engine", view: "engine" },
                         { label: "MCP Hub", view: "mcp" },
                         { label: "Skills Hub", view: "skills" }
@@ -85,7 +84,7 @@ Item {
                         border.color: Theme.border
                         border.width: 1
                         Text { anchors.centerIn: parent; text: modelData.label; color: Theme.text; font.pixelSize: Theme.fontSizeMd; font.bold: true }
-                        MouseArea { anchors.fill: parent; cursorShape: Qt.PointingHandCursor; onClicked: window.currentView = modelData.view }
+                        MouseArea { anchors.fill: parent; cursorShape: Qt.PointingHandCursor; onClicked: Navigation.go(modelData.view) }
                     }
                 }
             }
