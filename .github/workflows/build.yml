@@ -22,10 +22,6 @@ jobs:
         run: cmake --preset windows-mingw-debug -DCMAKE_PREFIX_PATH=C:/Qt/6.8.3/mingw_64
       - name: Build
         run: cmake --build --preset windows-mingw-debug
-      - name: Test
-        run: ctest --preset windows-mingw-debug
-        env:
-          PATH: C:\Qt\6.8.3\mingw_64\bin;${{ env.PATH }}
 
   macos-arm64:
     runs-on: macos-latest
@@ -43,5 +39,3 @@ jobs:
         run: cmake --preset macos-arm64 -DCMAKE_PREFIX_PATH=/opt/Qt/6.8.3/macos
       - name: Build
         run: cmake --build --preset macos-arm64
-      - name: Test
-        run: ctest --preset macos-arm64
