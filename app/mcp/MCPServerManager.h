@@ -8,7 +8,7 @@
 #include <QJsonObject>
 #include "MCPClient.h"
 
-namespace ModelFit {
+namespace ModelBench {
 
 enum class MCPServerStatus { Disconnected, Connecting, Connected, Error };
 
@@ -103,4 +103,4 @@ private:
     static constexpr int MaxLogEntries = 1000;
 };
 
-} // namespace ModelFit
+} // namespace ModelBench

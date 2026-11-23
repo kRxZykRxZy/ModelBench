@@ -6,6 +6,7 @@
 #include "inference/EngineInstaller.h"
 #include "inference/LlamaBackend.h"
 #include "core/Theme.h"
+#include "core/AccountManager.h"
 #include "chat/ConversationManager.h"
 #include "models/HuggingFaceClient.h"
 #include "models/ModelDownloader.h"
@@ -13,7 +14,7 @@
 #include "mcp/MCPServerManager.h"
 #include "skills/SkillsManager.h"
 
-namespace ModelFit {
+namespace ModelBench {
 
 class Application : public QObject {
     Q_OBJECT
@@ -30,6 +31,7 @@ public:
 
     EngineInstaller *engineInstaller() const { return m_engineInstaller; }
     Theme *theme() const { return m_theme; }
+    AccountManager *account() const { return m_account; }
     InferenceManager *inference() const { return m_inference; }
     ConversationManager *conversations() const { return m_conversations; }
     HuggingFaceClient *hfClient() const { return m_hfClient; }
@@ -52,6 +54,7 @@ private:
     QString m_logsDir;
     EngineInstaller *m_engineInstaller = nullptr;
     Theme *m_theme = nullptr;
+    AccountManager *m_account = nullptr;
     InferenceManager *m_inference = nullptr;
     ConversationManager *m_conversations = nullptr;
     HuggingFaceClient *m_hfClient = nullptr;
@@ -61,4 +64,4 @@ private:
     SkillsManager *m_skills = nullptr;
 };
 
-} // namespace ModelFit
+} // namespace ModelBench

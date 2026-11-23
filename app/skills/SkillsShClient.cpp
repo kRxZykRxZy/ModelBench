@@ -8,7 +8,7 @@
 #include <QJsonArray>
 #include <QDebug>
 
-namespace ModelFit {
+namespace ModelBench {
 
 SkillsShClient::SkillsShClient(QObject *parent) : QObject(parent) {}
 
@@ -17,7 +17,7 @@ void SkillsShClient::setVercelOidcToken(const QString &token) { m_token = token;
 
 QNetworkRequest SkillsShClient::makeRequest(const QString &url) const {
     QNetworkRequest req{QUrl(url)};
-    req.setHeader(QNetworkRequest::UserAgentHeader, "ModelFit/0.1");
+    req.setHeader(QNetworkRequest::UserAgentHeader, "ModelBench/0.1");
     req.setRawHeader("Accept", "application/json");
     if (!m_token.isEmpty())
         req.setRawHeader("Authorization", ("Bearer " + m_token).toUtf8());
@@ -159,4 +159,4 @@ void SkillsShClient::fetchSkillContent(const QString &skillId) {
             });
 }
 
-} // namespace ModelFit
+} // namespace ModelBench

@@ -2,7 +2,7 @@
 
 #include <atomic>
 
-namespace ModelFit {
+namespace ModelBench {
 
 /**
  * Tracks how much of the model's context window is in use.
@@ -32,4 +32,4 @@ private:
     std::atomic<int> m_used{0};
 };
 
-} // namespace ModelFit
+} // namespace ModelBench

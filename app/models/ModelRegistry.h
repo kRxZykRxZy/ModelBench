@@ -4,7 +4,7 @@
 #include <QJsonObject>
 #include <QList>
 
-namespace ModelFit {
+namespace ModelBench {
 
 struct InstalledModel {
     QString id;
@@ -23,4 +23,4 @@ private:
     QList<InstalledModel> m_models;
 };
 
-} // namespace ModelFit
+} // namespace ModelBench

@@ -5,7 +5,7 @@
 
 struct llama_model;
 
-namespace ModelFit {
+namespace ModelBench {
 
 struct ChatTurn {
     QString role;
@@ -43,4 +43,4 @@ public:
     static QString renderPrompt(const QList<ChatTurn> &messages, bool addAssistant = true);
 };
 
-} // namespace ModelFit
+} // namespace ModelBench

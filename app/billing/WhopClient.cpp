@@ -7,7 +7,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
-namespace ModelFit {
+namespace ModelBench {
 
 WhopClient::WhopClient(QObject *parent) : QObject(parent) {}
 
@@ -60,4 +60,4 @@ void WhopClient::fetchEntitlements(const QString &userId) {
     });
 }
 
-} // namespace ModelFit
+} // namespace ModelBench

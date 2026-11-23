@@ -1,7 +1,7 @@
 #include <QtTest>
 #include "app/skills/SkillsManager.h"
 
-using namespace ModelFit;
+using namespace ModelBench;
 
 class TestSkillsParser : public QObject {
     Q_OBJECT

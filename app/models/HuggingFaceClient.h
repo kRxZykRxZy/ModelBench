@@ -6,7 +6,7 @@
 #include <QJsonArray>
 #include <QVariantList>
 
-namespace ModelFit {
+namespace ModelBench {
 
 class HuggingFaceClient : public QObject {
     Q_OBJECT
@@ -28,4 +28,4 @@ private:
     QString m_token;
 };
 
-} // namespace ModelFit
+} // namespace ModelBench

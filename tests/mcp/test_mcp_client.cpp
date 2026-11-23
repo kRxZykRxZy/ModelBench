@@ -8,7 +8,7 @@
 
 #include "app/mcp/MCPClient.h"
 
-using namespace ModelFit;
+using namespace ModelBench;
 
 namespace {
 // Wait until cond() is true, processing Qt events meanwhile.

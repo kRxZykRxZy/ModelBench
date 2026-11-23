@@ -3,7 +3,6 @@ find_package(Qt6 REQUIRED COMPONENTS Test)
 
 set(COMMON_TEST_DEPS
     ${CMAKE_SOURCE_DIR}/app/hardware/HardwareDetector.cpp
-    ${CMAKE_SOURCE_DIR}/app/hardware/PerformanceEstimator.cpp
     ${CMAKE_SOURCE_DIR}/app/hardware/BackendDetector.cpp
     ${CMAKE_SOURCE_DIR}/app/skills/SkillsManager.cpp
     ${CMAKE_SOURCE_DIR}/app/mcp/MCPClient.cpp
@@ -30,7 +29,6 @@ endfunction()
 add_modelfit_test(test_hardware unit/test_hardware.cpp)
 add_modelfit_test(test_skills_parser unit/test_skills_parser.cpp)
 add_modelfit_test(test_mcp_jsonrpc unit/test_mcp_jsonrpc.cpp)
-add_modelfit_test(test_performance_estimator unit/test_performance_estimator.cpp)
 add_modelfit_test(test_inference inference/test_inference.cpp)
 add_modelfit_test(test_mcp_client mcp/test_mcp_client.cpp)
 add_modelfit_test(test_tool_calling mcp/test_tool_calling.cpp)

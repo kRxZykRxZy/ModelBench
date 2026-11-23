@@ -3,7 +3,7 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 
-namespace ModelFit {
+namespace ModelBench {
 
 Repositories::Repositories(const QString &dbPath) : m_dbPath(dbPath) {}
 
@@ -25,4 +25,4 @@ QString Repositories::getSetting(const QString &key, const QString &defaultValue
     return defaultValue;
 }
 
-} // namespace ModelFit
+} // namespace ModelBench

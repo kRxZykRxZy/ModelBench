@@ -4,7 +4,7 @@
 #include <QString>
 #include <QStringList>
 
-namespace ModelFit {
+namespace ModelBench {
 
 class SkillsManager;
 
@@ -42,4 +42,4 @@ private:
     int m_tokenBudget = 4000; // rough tokens
 };
 
-} // namespace ModelFit
+} // namespace ModelBench

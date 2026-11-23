@@ -5,7 +5,7 @@
 #include <QString>
 #include <QStringList>
 
-namespace ModelFit {
+namespace ModelBench {
 
 struct BackendAvailability {
     QString name;          // CPU, CUDA, Vulkan, Metal, ...
@@ -34,4 +34,4 @@ public:
     static bool probeLibrary(const QString &baseName, QString *pathOut = nullptr);
 };
 
-} // namespace ModelFit
+} // namespace ModelBench

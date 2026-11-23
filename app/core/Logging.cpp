@@ -18,7 +18,7 @@ static QString redact(const QString &msg) {
     return out;
 }
 
-namespace ModelFit::Logging {
+namespace ModelBench::Logging {
 
 static QFile *logFile = nullptr;
 
@@ -50,4 +50,4 @@ void install(const QString &logDir) {
 
 void setLevel(int level) { Q_UNUSED(level); }
 
-} // namespace ModelFit::Logging
+} // namespace ModelBench::Logging

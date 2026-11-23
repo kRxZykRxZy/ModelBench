@@ -4,7 +4,7 @@
 #include <QStringList>
 #include <QJsonObject>
 
-namespace ModelFit {
+namespace ModelBench {
 
 struct HardwareInfo {
     QString cpuManufacturer;
@@ -28,4 +28,4 @@ public:
     static QJsonObject toJson(const HardwareInfo &info);
 };
 
-} // namespace ModelFit
+} // namespace ModelBench

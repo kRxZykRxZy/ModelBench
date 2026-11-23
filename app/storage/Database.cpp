@@ -5,7 +5,7 @@
 #include <QDir>
 #include <QDebug>
 
-namespace ModelFit {
+namespace ModelBench {
 
 Database::Database(const QString &path) : m_path(path) {}
 
@@ -48,4 +48,4 @@ bool Database::runMigrations() {
     return true;
 }
 
-} // namespace ModelFit
+} // namespace ModelBench

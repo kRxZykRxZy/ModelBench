@@ -3,7 +3,7 @@
 #include <QObject>
 #include <QString>
 
-namespace ModelFit {
+namespace ModelBench {
 
 class SubscriptionManager : public QObject {
     Q_OBJECT
@@ -26,4 +26,4 @@ private:
     Tier m_tier = Free;
 };
 
-} // namespace ModelFit
+} // namespace ModelBench

@@ -11,8 +11,8 @@
 
 namespace {
 
-QList<ModelFit::MCPServerListing> parseServerListings(const QJsonDocument &doc) {
-    QList<ModelFit::MCPServerListing> out;
+QList<ModelBench::MCPServerListing> parseServerListings(const QJsonDocument &doc) {
+    QList<ModelBench::MCPServerListing> out;
     QJsonArray arr;
     if (doc.isArray()) {
         arr = doc.array();
@@ -27,7 +27,7 @@ QList<ModelFit::MCPServerListing> parseServerListings(const QJsonDocument &doc) 
     }
     for (const auto &v : arr) {
         QJsonObject o = v.toObject();
-        ModelFit::MCPServerListing s;
+        ModelBench::MCPServerListing s;
         s.id = o.value("id").toString(o.value("name").toString());
         s.name = o.value("name").toString(o.value("title").toString());
         s.description = o.value("description").toString();
@@ -51,7 +51,7 @@ QList<ModelFit::MCPServerListing> parseServerListings(const QJsonDocument &doc) 
 
 } // namespace
 
-namespace ModelFit {
+namespace ModelBench {
 
 OfficialMCPRegistryProvider::OfficialMCPRegistryProvider(QObject *parent)
     : IMCPRegistryProvider(parent), m_nam(new QNetworkAccessManager(this)) {}
@@ -60,7 +60,7 @@ void OfficialMCPRegistryProvider::setBaseUrl(const QString &url) { m_baseUrl = u
 
 QNetworkRequest OfficialMCPRegistryProvider::makeRequest(const QString &url) const {
     QNetworkRequest req{QUrl(url)};
-    req.setHeader(QNetworkRequest::UserAgentHeader, "ModelFit/0.1");
+    req.setHeader(QNetworkRequest::UserAgentHeader, "ModelBench/0.1");
     req.setRawHeader("Accept", "application/json");
     return req;
 }
@@ -127,7 +127,7 @@ void ThirdPartyMCPRegistryProvider::setEnabled(bool enabled) {
 QNetworkRequest ThirdPartyMCPRegistryProvider::authedRequest(
     const QString &url) const {
     QNetworkRequest req{QUrl(url)};
-    req.setHeader(QNetworkRequest::UserAgentHeader, "ModelFit/0.1");
+    req.setHeader(QNetworkRequest::UserAgentHeader, "ModelBench/0.1");
     req.setRawHeader("Accept", "application/json");
     if (!m_apiKey.isEmpty())
         req.setRawHeader("Authorization", ("Bearer " + m_apiKey).toUtf8());
@@ -184,5 +184,5 @@ void ThirdPartyMCPRegistryProvider::fetchServerDetails(const QString &serverId) 
             });
 }
 
-} // namespace ModelFit
+} // namespace ModelBench
 

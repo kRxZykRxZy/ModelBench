@@ -11,7 +11,7 @@
 #include <QTimer>
 #include <QElapsedTimer>
 
-namespace ModelFit {
+namespace ModelBench {
 
 struct MCPTool {
     QString name;
@@ -257,7 +257,7 @@ private:
     qint64 m_approvalId = 1;
 };
 
-} // namespace ModelFit
+} // namespace ModelBench
 
-Q_DECLARE_METATYPE(ModelFit::MCPClientError)
-Q_DECLARE_METATYPE(ModelFit::MCPErrorInfo)
+Q_DECLARE_METATYPE(ModelBench::MCPClientError)
+Q_DECLARE_METATYPE(ModelBench::MCPErrorInfo)

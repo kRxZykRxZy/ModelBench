@@ -5,7 +5,7 @@
 #include <QFile>
 #include <QNetworkReply>
 
-namespace ModelFit {
+namespace ModelBench {
 
 class ModelDownloader : public QObject {
     Q_OBJECT
@@ -15,6 +15,7 @@ public:
     Q_INVOKABLE void cancel();
     Q_INVOKABLE bool isRunning() const { return m_running; }
     Q_INVOKABLE QString modelsDirectory() const;
+    Q_INVOKABLE QStringList listDownloadedModels() const;
 
 signals:
     void progress(qint64 received, qint64 total, double speedBytesPerSec);
@@ -30,4 +31,4 @@ private:
     qint64 m_total = 0;
 };
 
-} // namespace ModelFit
+} // namespace ModelBench

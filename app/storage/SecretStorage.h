@@ -3,7 +3,7 @@
 #include <QString>
 #include <QByteArray>
 
-namespace ModelFit {
+namespace ModelBench {
 
 class ISecretStorage {
 public:
@@ -16,4 +16,4 @@ public:
 // Factory
 ISecretStorage *createSecretStorage();
 
-} // namespace ModelFit
+} // namespace ModelBench

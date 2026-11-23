@@ -3,7 +3,7 @@
 #include <QString>
 #include <QSqlDatabase>
 
-namespace ModelFit {
+namespace ModelBench {
 
 class Database {
 public:
@@ -19,4 +19,4 @@ private:
     QSqlDatabase m_db;
 };
 
-} // namespace ModelFit
+} // namespace ModelBench

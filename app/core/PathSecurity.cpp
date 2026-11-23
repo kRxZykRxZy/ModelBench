@@ -3,7 +3,7 @@
 #include <QFileInfo>
 #include <QDir>
 
-namespace ModelFit::PathSecurity {
+namespace ModelBench::PathSecurity {
 
 bool isInside(const QString &root, const QString &child) {
     QString r = QDir(root).absolutePath();
@@ -22,4 +22,4 @@ QString sanitizeFileName(const QString &name) {
     return out;
 }
 
-} // namespace ModelFit::PathSecurity
+} // namespace ModelBench::PathSecurity

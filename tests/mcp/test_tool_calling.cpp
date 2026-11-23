@@ -6,7 +6,7 @@
 #include "app/mcp/ToolCalling.h"
 #include "app/mcp/MCPClient.h"
 
-using namespace ModelFit;
+using namespace ModelBench;
 
 namespace {
 bool waitFor(std::function<bool()> cond, int msecs = 5000) {

@@ -6,7 +6,7 @@
 #include <llama.h>
 #endif
 
-namespace ModelFit {
+namespace ModelBench {
 
 QString ChatTemplate::modelTemplate(const llama_model *model, const QString &name)
 {
@@ -102,4 +102,4 @@ QString ChatTemplate::renderPrompt(const QList<ChatTurn> &messages, bool addAssi
     return fallback(messages, addAssistant);
 }
 
-} // namespace ModelFit
+} // namespace ModelBench

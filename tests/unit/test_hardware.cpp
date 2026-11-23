@@ -1,7 +1,7 @@
 #include <QtTest>
 #include "app/hardware/HardwareDetector.h"
 
-using namespace ModelFit;
+using namespace ModelBench;
 
 class TestHardware : public QObject {
     Q_OBJECT

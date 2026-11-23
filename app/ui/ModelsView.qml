@@ -10,6 +10,11 @@ Item {
     property var modelFiles: []
     property var downloadedModels: ({})
     property string pendingDownloadModel: ""
+    property var localModels: downloader.listDownloadedModels()
+
+    function refreshLocalModels() {
+        localModels = downloader.listDownloadedModels()
+    }
 
     function doSearch() {
         root.statusText = "Searching..."
@@ -48,6 +53,7 @@ Item {
                 root.downloadedModels = m
                 root.pendingDownloadModel = ""
             }
+            root.refreshLocalModels()
         }
         function onFailed(err) { root.statusText = "Download failed: " + err }
     }
@@ -135,6 +141,116 @@ Item {
             }
         }
 
+        // Downloaded models
+        Text { text: "Downloaded Models"; color: Theme.text; font.bold: true; font.pixelSize: Theme.fontSizeLg }
+        Rectangle {
+            Layout.fillWidth: true
+            Layout.preferredHeight: 130
+            radius: Theme.radiusMd
+            color: Theme.panel
+            border.color: Theme.border
+            border.width: 1
+            ColumnLayout {
+                anchors.fill: parent
+                anchors.margins: Theme.sp2
+                spacing: Theme.sp1
+                Text { text: "Local GGUF files in " + downloader.modelsDirectory(); color: Theme.textMuted; font.pixelSize: Theme.fontSizeXs; wrapMode: Text.Wrap; Layout.fillWidth: true }
+                ListView {
+                    id: localList
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    clip: true
+                    model: downloader.listDownloadedModels()
+                    delegate: Rectangle {
+                        width: localList.width
+                        implicitHeight: 40
+                        color: "transparent"
+                        border.color: Theme.border
+                        border.width: 1
+                        RowLayout {
+                            anchors.fill: parent
+                            anchors.margins: Theme.sp2
+                            Text {
+                                Layout.fillWidth: true
+                                text: modelData.split('/').pop()
+                                color: Theme.text
+                                font.pixelSize: Theme.fontSizeSm
+                                elide: Text.ElideRight
+                            }
+                            Button {
+                                text: "Load"
+                                onClicked: {
+                                    if (inference.loadModelFile(modelData)) {
+                                        root.statusText = "Loaded " + modelData.split('/').pop()
+                                    } else {
+                                        root.statusText = "Failed to load " + modelData.split('/').pop() + " — rebuild with llama.cpp ON"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Load local file
+        // Downloaded models
+        Rectangle {
+            Layout.fillWidth: true
+            Layout.preferredHeight: 140
+            radius: Theme.radiusMd
+            color: Theme.panel
+            border.color: Theme.border
+            border.width: 1
+            ColumnLayout {
+                anchors.fill: parent
+                anchors.margins: Theme.sp3
+                spacing: Theme.sp2
+                RowLayout {
+                    Layout.fillWidth: true
+                    Text { text: "Downloaded Models"; color: Theme.text; font.bold: true; font.pixelSize: Theme.fontSizeMd }
+                    Item { Layout.fillWidth: true }
+                    Button { text: "Refresh"; onClicked: root.refreshLocalModels() }
+                }
+                Text { text: "Folder: " + downloader.modelsDirectory(); color: Theme.textSubtle; font.pixelSize: Theme.fontSizeXs; wrapMode: Text.Wrap; Layout.fillWidth: true }
+                ListView {
+                    id: localList
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    clip: true
+                    model: root.localModels
+                    delegate: Rectangle {
+                        width: localList.width
+                        implicitHeight: 40
+                        color: "transparent"
+                        border.color: Theme.border
+                        border.width: 1
+                        RowLayout {
+                            anchors.fill: parent
+                            anchors.margins: Theme.sp2
+                            Text {
+                                Layout.fillWidth: true
+                                text: modelData.split('/').pop()
+                                color: Theme.text
+                                font.pixelSize: Theme.fontSizeSm
+                                elide: Text.ElideRight
+                            }
+                            Button {
+                                text: "Load"
+                                onClicked: {
+                                    if (inference.loadModelFile(modelData)) {
+                                        root.statusText = "Loaded " + modelData.split('/').pop()
+                                    } else {
+                                        root.statusText = "Failed to load " + modelData.split('/').pop()
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         Rectangle {
             Layout.fillWidth: true
             Layout.preferredHeight: 90
@@ -162,7 +278,7 @@ Item {
                             if (inference.loadModelFile(localPath.text)) {
                                 root.statusText = "Model loaded successfully"
                             } else {
-                                root.statusText = "Failed to load model. Enable llama.cpp build or check path."
+                                root.statusText = "Failed to load. Rebuild with -DMODELFIT_ENABLE_LLAMA_CPP=ON"
                             }
                         }
                     }

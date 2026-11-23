@@ -3,10 +3,10 @@
 #include <QUuid>
 #include <QDateTime>
 
-namespace ModelFit {
+namespace ModelBench {
 
 ConversationManager::ConversationManager(QObject *parent) : QObject(parent) {
-    qRegisterMetaType<ChatMessage>("ModelFit::ChatMessage");
+    qRegisterMetaType<ChatMessage>("ModelBench::ChatMessage");
 }
 
 QString ConversationManager::createConversation(const QString &title, const QString &modelId) {
@@ -77,4 +77,4 @@ void ConversationManager::deleteConversation(const QString &convId) {
         [&](const Conv &c){ return c.id == convId; }), m_convs.end());
 }
 
-} // namespace ModelFit
+} // namespace ModelBench

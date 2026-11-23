@@ -11,7 +11,7 @@
 #include <QUuid>
 #include <algorithm>
 
-namespace ModelFit {
+namespace ModelBench {
 
 MCPServerManager::MCPServerManager(QObject *parent) : QObject(parent) {
     m_storagePath =
@@ -328,4 +328,4 @@ void MCPServerManager::onClientLog(const QString &id,
     addLog(id, line);
 }
 
-} // namespace ModelFit
+} // namespace ModelBench

@@ -4,7 +4,7 @@
 #include <QColor>
 #include <QString>
 
-namespace ModelFit {
+namespace ModelBench {
 
 class Theme : public QObject {
     Q_OBJECT
@@ -85,4 +85,4 @@ public:
     bool dark() const { return true; }
 };
 
-} // namespace ModelFit
+} // namespace ModelBench

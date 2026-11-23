@@ -7,7 +7,7 @@ if(CCACHE_PROGRAM)
     set(CMAKE_C_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
 endif()
 
-project(ModelFit VERSION 0.1.0 LANGUAGES CXX)
+project(ModelBench VERSION 0.1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -39,15 +39,17 @@ set(MODELFIT_SOURCES
     app/core/Logging.cpp
     app/core/PathSecurity.cpp
     app/core/Theme.cpp
+    app/core/AccountManager.cpp
     app/storage/Database.cpp
     app/storage/Repositories.cpp
     app/storage/SecretStorage.cpp
     app/hardware/HardwareDetector.cpp
     app/hardware/BackendDetector.cpp
-    app/hardware/PerformanceEstimator.cpp
     app/models/HuggingFaceClient.cpp
     app/models/ModelRegistry.cpp
     app/models/ModelDownloader.cpp
+    app/models/ModelDownloads.cpp
+    app/models/ModelDownloads.cpp
     app/chat/ConversationManager.cpp
     app/chat/ChatOrchestrator.cpp
     app/inference/LlamaBackend.cpp
@@ -72,12 +74,12 @@ set(MODELFIT_HEADERS
     app/core/Logging.h
     app/core/PathSecurity.h
     app/core/Theme.h
+    app/core/AccountManager.h
     app/storage/Database.h
     app/storage/Repositories.h
     app/storage/SecretStorage.h
     app/hardware/HardwareDetector.h
     app/hardware/BackendDetector.h
-    app/hardware/PerformanceEstimator.h
     app/models/HuggingFaceClient.h
     app/models/ModelRegistry.h
     app/models/ModelDownloader.h
@@ -99,41 +101,41 @@ set(MODELFIT_HEADERS
     app/api/LocalApiServer.h
 )
 
-qt_add_executable(ModelFit
+qt_add_executable(ModelBench
     ${MODELFIT_SOURCES}
     ${MODELFIT_HEADERS}
 )
 
-target_include_directories(ModelFit PRIVATE
+target_include_directories(ModelBench PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/app
 )
 
-target_link_libraries(ModelFit PRIVATE
+target_link_libraries(ModelBench PRIVATE
     Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Quick Qt6::QuickControls2
     Qt6::Network Qt6::Sql Qt6::Concurrent)
 
 if(WIN32)
-    target_link_libraries(ModelFit PRIVATE crypt32)
+    target_link_libraries(ModelBench PRIVATE crypt32)
 endif()
 
 if(MODELFIT_ENABLE_LLAMA_CPP)
-    target_compile_definitions(ModelFit PRIVATE HAVE_LLAMA_CPP=1)
+    target_compile_definitions(ModelBench PRIVATE HAVE_LLAMA_CPP=1)
     if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/llama.cpp/CMakeLists.txt")
         set(LLAMA_BUILD_TESTS OFF CACHE BOOL "" FORCE)
         set(LLAMA_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
         set(LLAMA_BUILD_SERVER OFF CACHE BOOL "" FORCE)
         add_subdirectory(third_party/llama.cpp)
-        target_link_libraries(ModelFit PRIVATE llama)
-        target_include_directories(ModelFit PRIVATE
+        target_link_libraries(ModelBench PRIVATE llama)
+        target_include_directories(ModelBench PRIVATE
             ${CMAKE_CURRENT_SOURCE_DIR}/third_party/llama.cpp/include
             ${CMAKE_CURRENT_SOURCE_DIR}/third_party/llama.cpp/ggml/include
         )
     endif()
 endif()
 
-qt_add_qml_module(ModelFit
-    URI ModelFit
+qt_add_qml_module(ModelBench
+    URI ModelBench
     VERSION 1.0
     QML_FILES
         app/ui/Main.qml
@@ -143,14 +145,14 @@ qt_add_qml_module(ModelFit
         app/ui/ChatView.qml
         app/ui/ModelsView.qml
         app/ui/EngineInstallView.qml
-        app/ui/CalculatorView.qml
         app/ui/McpHubView.qml
         app/ui/SkillsHubView.qml
         app/ui/SettingsView.qml
+        app/ui/LoginView.qml
         app/ui/SubscriptionView.qml
 )
 
-install(TARGETS ModelFit RUNTIME DESTINATION bin)
+install(TARGETS ModelBench RUNTIME DESTINATION bin)
 
 enable_testing()
 add_subdirectory(tests)

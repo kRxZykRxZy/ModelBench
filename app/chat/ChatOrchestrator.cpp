@@ -1,6 +1,6 @@
 #include "ChatOrchestrator.h"
 
-namespace ModelFit {
+namespace ModelBench {
 
 ChatOrchestrator::ChatOrchestrator(QObject *parent) : QObject(parent) {}
 
@@ -10,4 +10,4 @@ void ChatOrchestrator::sendMessage(const QString &conversationId, const QString 
     emit generationFinished(conversationId);
 }
 
-} // namespace ModelFit
+} // namespace ModelBench

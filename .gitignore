@@ -1,4 +1,4 @@
-# ModelFit ignore rules
+# ModelBench ignore rules
 build/
 *.user
 *.autosave

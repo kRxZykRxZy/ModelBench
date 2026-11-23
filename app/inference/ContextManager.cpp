@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-namespace ModelFit {
+namespace ModelBench {
 
 void ContextManager::setCapacity(int capacity)
 {
@@ -67,4 +67,4 @@ int ContextManager::maxPromptTokens(int reserve) const
     return std::max(0, cap - std::max(0, reserve));
 }
 
-} // namespace ModelFit
+} // namespace ModelBench

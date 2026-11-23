@@ -74,7 +74,7 @@ Item {
 
             Text { id: statusText; text: ""; color: Theme.success; font.pixelSize: Theme.fontSizeSm }
 
-            Text { text: "ModelFit v0.1.0 · Local data: " + app.dataDirectory; color: Theme.textSubtle; font.pixelSize: Theme.fontSizeXs; wrapMode: Text.Wrap; Layout.fillWidth: true }
+            Text { text: "ModelBench v0.1.0 · Local data: " + app.dataDirectory; color: Theme.textSubtle; font.pixelSize: Theme.fontSizeXs; wrapMode: Text.Wrap; Layout.fillWidth: true }
         }
     }
 }

@@ -23,7 +23,7 @@
 #include <windows.h>
 #endif
 
-namespace ModelFit {
+namespace ModelBench {
 
 namespace {
 
@@ -413,4 +413,4 @@ QJsonObject HardwareDetector::toJson(const HardwareInfo &info)
     return o;
 }
 
-} // namespace ModelFit
+} // namespace ModelBench

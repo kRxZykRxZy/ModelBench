@@ -178,7 +178,7 @@ Item {
                             anchors.fill: parent
                             anchors.margins: Theme.sp2
                             Text {
-                                text: modelData.role === "user" ? "You" : "ModelFit"
+                                text: modelData.role === "user" ? "You" : "ModelBench"
                                 color: modelData.role === "user" ? Theme.accent : Theme.textMuted
                                 font.pixelSize: Theme.fontSizeXs
                                 font.bold: true
@@ -208,7 +208,7 @@ Item {
                         id: streamText
                         anchors.fill: parent
                         anchors.margins: Theme.sp2
-                        text: "ModelFit: " + root.currentResponse + "|"
+                        text: "ModelBench: " + root.currentResponse + "|"
                         color: Theme.text
                         font.pixelSize: Theme.fontSizeMd
                         wrapMode: Text.Wrap
@@ -231,7 +231,7 @@ Item {
                         id: textInput
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        placeholderText: "Message ModelFit..."
+                        placeholderText: "Message ModelBench..."
                         wrapMode: TextArea.Wrap
                         font.pixelSize: Theme.fontSizeMd
                         color: Theme.text

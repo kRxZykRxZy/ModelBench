@@ -1,6 +1,6 @@
 #include "SubscriptionManager.h"
 
-namespace ModelFit {
+namespace ModelBench {
 
 SubscriptionManager::SubscriptionManager(QObject *parent) : QObject(parent) {}
 
@@ -33,4 +33,4 @@ void SubscriptionManager::startCheckout(Tier tier) {
     emit checkoutReady(QString());
 }
 
-} // namespace ModelFit
+} // namespace ModelBench

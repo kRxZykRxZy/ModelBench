@@ -30,7 +30,7 @@ Item {
                 }
                 Text {
                     visible: !root.compact
-                    text: "ModelFit"
+                    text: "ModelBench"
                     color: Theme.text
                     font.pixelSize: Theme.fontSizeLg
                     font.bold: true
@@ -46,10 +46,10 @@ Item {
                     { id: "chat", label: "Chat", icon: "C" },
                     { id: "models", label: "Models", icon: "Mo" },
                     { id: "engine", label: "Engine", icon: "En" },
-                    { id: "calculator", label: "Model Fit", icon: "Fx" },
                     { id: "mcp", label: "MCP Hub", icon: "Mc" },
                     { id: "skills", label: "Skills Hub", icon: "Sk" },
-                    { id: "settings", label: "Settings", icon: "Se" }
+                    { id: "settings", label: "Settings", icon: "Se" },
+                    { id: "account", label: "Account", icon: "Ac" }
                 ]
                 delegate: Rectangle {
                     Layout.fillWidth: true

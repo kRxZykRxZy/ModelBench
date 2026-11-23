@@ -1,6 +1,6 @@
-# ModelFit Desktop
+# ModelBench Desktop
 
-ModelFit is a native local AI workstation for Windows and macOS.
+ModelBench is a native local AI workstation for Windows and macOS.
 
 - Native C++20 + Qt 6.12 LTS + QML
 - Embedded llama.cpp inference engine

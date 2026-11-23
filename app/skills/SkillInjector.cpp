@@ -5,7 +5,7 @@
 #include <QDateTime>
 #include <QTextStream>
 
-namespace ModelFit {
+namespace ModelBench {
 
 SkillInjector::SkillInjector(QObject *parent) : QObject(parent) {}
 
@@ -111,4 +111,4 @@ QString SkillInjector::buildContextBlock() const {
     return buildContextBlock(ids);
 }
 
-} // namespace ModelFit
+} // namespace ModelBench

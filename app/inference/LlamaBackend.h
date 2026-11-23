@@ -16,7 +16,7 @@
 
 class QThread;
 
-namespace ModelFit {
+namespace ModelBench {
 
 struct InferenceConfig {
     QString modelPath;
@@ -149,6 +149,6 @@ private:
     LlamaBackend m_backend;
 };
 
-} // namespace ModelFit
+} // namespace ModelBench
 
-Q_DECLARE_METATYPE(ModelFit::InferenceResult)
+Q_DECLARE_METATYPE(ModelBench::InferenceResult)

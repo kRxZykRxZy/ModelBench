@@ -3,7 +3,7 @@
 #include <QObject>
 #include <QString>
 
-namespace ModelFit {
+namespace ModelBench {
 
 class ChatOrchestrator : public QObject {
     Q_OBJECT
@@ -16,4 +16,4 @@ signals:
     void generationError(const QString &conversationId, const QString &error);
 };
 
-} // namespace ModelFit
+} // namespace ModelBench

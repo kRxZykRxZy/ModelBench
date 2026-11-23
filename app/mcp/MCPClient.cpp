@@ -13,13 +13,13 @@
 #include <QDebug>
 #include <cmath>
 
-namespace ModelFit {
+namespace ModelBench {
 
 using enum MCPClientError;
 
 MCPClient::MCPClient(QObject *parent) : QObject(parent) {
-    qRegisterMetaType<MCPClientError>("ModelFit::MCPClientError");
-    qRegisterMetaType<MCPErrorInfo>("ModelFit::MCPErrorInfo");
+    qRegisterMetaType<MCPClientError>("ModelBench::MCPClientError");
+    qRegisterMetaType<MCPErrorInfo>("ModelBench::MCPErrorInfo");
 
     connect(&m_proc, &QProcess::readyReadStandardOutput, this,
             &MCPClient::handleStdioStdout);
@@ -177,7 +177,7 @@ void MCPClient::doHandshake() {
     QJsonObject params;
     params["protocolVersion"] = "2025-03-26";
     QJsonObject clientInfo;
-    clientInfo["name"] = "ModelFit";
+    clientInfo["name"] = "ModelBench";
     clientInfo["version"] = "0.1.0";
     params["clientInfo"] = clientInfo;
     QJsonObject capabilities;
@@ -864,4 +864,4 @@ void MCPClient::fail(const QString &message, MCPClientError code) {
         scheduleReconnect();
 }
 
-} // namespace ModelFit
+} // namespace ModelBench

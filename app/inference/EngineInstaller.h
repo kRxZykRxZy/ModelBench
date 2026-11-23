@@ -5,7 +5,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 
-namespace ModelFit {
+namespace ModelBench {
 
 class EngineInstaller : public QObject {
     Q_OBJECT
@@ -48,4 +48,4 @@ private:
     QString m_downloadDest;
 };
 
-} // namespace ModelFit
+} // namespace ModelBench

@@ -23,7 +23,7 @@ static void ensureBackendInitPlaceholder() {
 }
 #endif
 
-namespace ModelFit {
+namespace ModelBench {
 
 struct LlamaBackend::Engine {
 #if defined(HAVE_LLAMA_CPP) && HAVE_LLAMA_CPP
@@ -36,7 +36,7 @@ struct LlamaBackend::Engine {
 
 LlamaBackend::LlamaBackend(QObject *parent) : QObject(parent) {
     m_engine = std::make_unique<Engine>();
-    qRegisterMetaType<InferenceResult>("ModelFit::InferenceResult");
+    qRegisterMetaType<InferenceResult>("ModelBench::InferenceResult");
 }
 
 LlamaBackend::~LlamaBackend() { unloadModel(); }
@@ -240,4 +240,4 @@ int InferenceManager::contextCapacity() const { return m_backend.contextManager(
 QString InferenceManager::formatChat(const QList<ChatTurn> &messages, const QString &tmplOverride, bool addAssistant) const { return m_backend.formatChat(messages, tmplOverride, addAssistant); }
 QString InferenceManager::chatTemplate(const QString &name) const { return m_backend.chatTemplate(name); }
 
-} // namespace ModelFit
+} // namespace ModelBench

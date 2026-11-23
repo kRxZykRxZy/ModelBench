@@ -15,7 +15,7 @@ Item {
             anchors.margins: Theme.sp5
             spacing: Theme.sp4
 
-            Text { text: "Welcome to ModelFit"; color: Theme.text; font.pixelSize: Theme.fontSize2xl; font.bold: true }
+            Text { text: "Welcome to ModelBench"; color: Theme.text; font.pixelSize: Theme.fontSize2xl; font.bold: true }
             Text { text: "Your local AI workstation. Inference runs on your machine — no account required."; color: Theme.textMuted; font.pixelSize: Theme.fontSizeMd; wrapMode: Text.Wrap; Layout.fillWidth: true }
 
             // Status card

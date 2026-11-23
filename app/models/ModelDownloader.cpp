@@ -9,7 +9,7 @@
 #include <QDir>
 #include <QDebug>
 
-namespace ModelFit {
+namespace ModelBench {
 
 ModelDownloader::ModelDownloader(QObject *parent) : QObject(parent) {}
 
@@ -32,7 +32,8 @@ void ModelDownloader::download(const QString &url, const QString &destPath) {
         return;
     }
     QNetworkRequest req{QUrl(url)};
-    req.setHeader(QNetworkRequest::UserAgentHeader, "ModelFit/0.1");
+    req.setHeader(QNetworkRequest::UserAgentHeader, "ModelBench/0.1");
+    req.setAttribute(QNetworkRequest::RedirectPolicyAttribute, QNetworkRequest::NoLessSafeRedirectPolicy);
     if (existing > 0) req.setRawHeader("Range", ("bytes=" + QString::number(existing) + "-").toUtf8());
     m_reply = m_nam.get(req);
     connect(m_reply, &QNetworkReply::downloadProgress, this, [this](qint64 rx, qint64 total) {
@@ -63,4 +64,4 @@ void ModelDownloader::cancel() {
     m_running = false;
 }
 
-} // namespace ModelFit
+} // namespace ModelBench

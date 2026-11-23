@@ -14,12 +14,12 @@
 #include <QUuid>
 #include <algorithm>
 
-namespace ModelFit {
+namespace ModelBench {
 
 static const int kMaxScanFileSize = 2 * 1024 * 1024; // 2 MiB
 
 SkillsManager::SkillsManager(QObject *parent) : QObject(parent) {
-    qRegisterMetaType<SecurityWarning>("ModelFit::SecurityWarning");
+    qRegisterMetaType<SecurityWarning>("ModelBench::SecurityWarning");
 
     QString appData =
         QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
@@ -369,4 +369,4 @@ QVariantList SkillsManager::getInstalled() const {
     return out;
 }
 
-} // namespace ModelFit
+} // namespace ModelBench

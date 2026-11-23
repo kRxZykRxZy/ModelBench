@@ -7,7 +7,7 @@
 #include <QHash>
 #include <QDateTime>
 
-namespace ModelFit {
+namespace ModelBench {
 
 struct SecurityWarning {
     QString file;          // path relative to the skill directory
@@ -83,6 +83,6 @@ private:
     QHash<QString, QList<SecurityWarning>> m_warnings;
 };
 
-} // namespace ModelFit
+} // namespace ModelBench
 
-Q_DECLARE_METATYPE(ModelFit::SecurityWarning)
+Q_DECLARE_METATYPE(ModelBench::SecurityWarning)

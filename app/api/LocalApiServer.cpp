@@ -3,7 +3,7 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 
-namespace ModelFit {
+namespace ModelBench {
 
 LocalApiServer::LocalApiServer(QObject *parent) : QObject(parent) {}
 
@@ -20,4 +20,4 @@ void LocalApiServer::stop() {
     emit stopped();
 }
 
-} // namespace ModelFit
+} // namespace ModelBench

@@ -3,7 +3,7 @@
 #include <QString>
 #include <QVariantMap>
 
-namespace ModelFit {
+namespace ModelBench {
 
 class Repositories {
 public:
@@ -14,4 +14,4 @@ private:
     QString m_dbPath;
 };
 
-} // namespace ModelFit
+} // namespace ModelBench

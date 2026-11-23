@@ -1,6 +1,6 @@
 #include "ModelRegistry.h"
 
-namespace ModelFit {
+namespace ModelBench {
 
 void ModelRegistry::add(const InstalledModel &m) { m_models << m; }
 void ModelRegistry::remove(const QString &id) {
@@ -13,4 +13,4 @@ InstalledModel ModelRegistry::find(const QString &id) const {
     return {};
 }
 
-} // namespace ModelFit
+} // namespace ModelBench

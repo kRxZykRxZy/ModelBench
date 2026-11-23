@@ -9,7 +9,7 @@ ApplicationWindow {
     height: 820
     minimumWidth: 960
     minimumHeight: 640
-    title: "ModelFit"
+    title: "ModelBench"
     color: Theme.bg
 
     property string currentView: "home"
@@ -46,10 +46,10 @@ ApplicationWindow {
                 ChatView { }
                 ModelsView { }
                 EngineInstallView { }
-                CalculatorView { }
                 McpHubView { }
                 SkillsHubView { }
                 SettingsView { }
+                LoginView { }
                 SubscriptionView { }
             }
         }
@@ -61,10 +61,10 @@ ApplicationWindow {
             case "chat": return 1;
             case "models": return 2;
             case "engine": return 3;
-            case "calculator": return 4;
-            case "mcp": return 5;
-            case "skills": return 6;
-            case "settings": return 7;
+            case "mcp": return 4;
+            case "skills": return 5;
+            case "settings": return 6;
+            case "account": return 7;
             case "subscription": return 8;
         }
         return 0;

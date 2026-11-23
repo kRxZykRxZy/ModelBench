@@ -12,7 +12,7 @@
 #include <QDebug>
 #include <QQmlContext>
 
-namespace ModelFit {
+namespace ModelBench {
 
 Application::Application(QObject *parent) : QObject(parent) {}
 
@@ -24,6 +24,7 @@ bool Application::initialize() {
     if (!initDatabase()) return false;
     m_engineInstaller = new EngineInstaller(this);
     m_theme = new Theme(this);
+    m_account = new AccountManager(this);
     m_inference = new InferenceManager(this);
     m_conversations = new ConversationManager(this);
     m_hfClient = new HuggingFaceClient(this);
@@ -47,7 +48,7 @@ bool Application::initPaths() {
 
 bool Application::initLogging() {
     Logging::install(m_logsDir);
-    qInfo() << "ModelFit" << "data:" << m_dataDir;
+    qInfo() << "ModelBench" << "data:" << m_dataDir;
     return true;
 }
 
@@ -60,6 +61,7 @@ void Application::registerQmlTypes(QQmlApplicationEngine &engine) {
     QQmlContext *ctx = engine.rootContext();
     ctx->setContextProperty("engineInstaller", m_engineInstaller);
     ctx->setContextProperty("Theme", m_theme);
+    ctx->setContextProperty("account", m_account);
     ctx->setContextProperty("inference", m_inference);
     ctx->setContextProperty("conversations", m_conversations);
     ctx->setContextProperty("hfClient", m_hfClient);
@@ -78,4 +80,4 @@ QVariantMap Application::hardwareInfo() const {
     return HardwareDetector::toJson(HardwareDetector::detect()).toVariantMap();
 }
 
-} // namespace ModelFit
+} // namespace ModelBench

@@ -1,6 +1,6 @@
 #include "Theme.h"
 
-namespace ModelFit {
+namespace ModelBench {
 
 Theme::Theme(QObject *parent) : QObject(parent) {}
 
@@ -14,4 +14,4 @@ QColor Theme::text() const { return QColor("#E6E8EC"); }
 QColor Theme::textMuted() const { return QColor("#9AA0AC"); }
 QColor Theme::textSubtle() const { return QColor("#6B7180"); }
 
-} // namespace ModelFit
+} // namespace ModelBench

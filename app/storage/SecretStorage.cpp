@@ -14,7 +14,7 @@
 
 namespace {
 
-class WindowsSecretStorage : public ModelFit::ISecretStorage {
+class WindowsSecretStorage : public ModelBench::ISecretStorage {
 public:
     bool store(const QString &service, const QString &account, const QByteArray &secret) override {
 #ifdef Q_OS_WIN
@@ -63,8 +63,8 @@ public:
 
 } // namespace
 
-namespace ModelFit {
+namespace ModelBench {
 ISecretStorage *createSecretStorage() {
     return new WindowsSecretStorage();
 }
-} // namespace ModelFit
+} // namespace ModelBench

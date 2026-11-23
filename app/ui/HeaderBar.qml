@@ -26,6 +26,7 @@ Rectangle {
                     case "mcp": return "MCP Hub";
                     case "skills": return "Skills Hub";
                     case "settings": return "Settings";
+                    case "account": return "Account";
                     case "subscription": return "Subscription";
                 }
                 return "";

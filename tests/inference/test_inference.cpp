@@ -8,7 +8,7 @@
 #include "app/inference/ContextManager.h"
 #include "app/inference/LlamaBackend.h"
 
-using namespace ModelFit;
+using namespace ModelBench;
 
 class TestInference : public QObject {
     Q_OBJECT
@@ -31,7 +31,7 @@ private:
 
 void TestInference::initTestCase()
 {
-    qRegisterMetaType<InferenceResult>("ModelFit::InferenceResult");
+    qRegisterMetaType<InferenceResult>("ModelBench::InferenceResult");
     m_modelPath = qEnvironmentVariable("MODELFIT_TEST_MODEL");
     if (m_modelPath.isEmpty()) {
         qInfo() << "MODELFIT_TEST_MODEL is not set; model-backed inference tests will be skipped";

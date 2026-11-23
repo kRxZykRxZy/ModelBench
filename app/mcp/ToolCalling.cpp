@@ -7,10 +7,10 @@
 #include <QJsonValue>
 #include <cmath>
 
-namespace ModelFit {
+namespace ModelBench {
 
 ToolCalling::ToolCalling(QObject *parent) : QObject(parent) {
-    qRegisterMetaType<ToolCallResult>("ModelFit::ToolCallResult");
+    qRegisterMetaType<ToolCallResult>("ModelBench::ToolCallResult");
 }
 
 ToolCalling::~ToolCalling() = default;
@@ -247,4 +247,4 @@ void ToolCalling::onClientToolCallDenied(qint64 /*requestId*/,
     emit toolCallFinished(m_serverId, name, r);
 }
 
-} // namespace ModelFit
+} // namespace ModelBench

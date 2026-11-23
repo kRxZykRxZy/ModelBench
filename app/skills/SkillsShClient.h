@@ -6,7 +6,7 @@
 #include <QJsonArray>
 #include <QString>
 
-namespace ModelFit {
+namespace ModelBench {
 
 struct SkillListing {
     QString id;
@@ -50,4 +50,4 @@ private:
     QString m_token;
 };
 
-} // namespace ModelFit
+} // namespace ModelBench

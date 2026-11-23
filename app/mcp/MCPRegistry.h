@@ -7,7 +7,7 @@
 #include <QList>
 #include <QNetworkAccessManager>
 
-namespace ModelFit {
+namespace ModelBench {
 
 struct MCPServerListing {
     QString id;
@@ -74,4 +74,4 @@ private:
     bool m_enabled = false;
 };
 
-} // namespace ModelFit
+} // namespace ModelBench

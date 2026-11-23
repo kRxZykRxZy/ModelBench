@@ -1,6 +1,6 @@
 # Inference
 
-ModelFit runs GGUF models in-process through llama.cpp. The implementation lives
+ModelBench runs GGUF models in-process through llama.cpp. The implementation lives
 in `app/inference/` and is compiled in only when `MODELFIT_ENABLE_LLAMA_CPP=ON`
 and the `third_party/llama.cpp` submodule is present. Without it, the same API
 is still available and reports that inference is unavailable.
@@ -26,7 +26,7 @@ submodule produces a warning instead of a broken build.
 ```cpp
 #include "app/inference/LlamaBackend.h"
 
-using namespace ModelFit;
+using namespace ModelBench;
 
 InferenceConfig cfg;
 cfg.contextLength = 4096;

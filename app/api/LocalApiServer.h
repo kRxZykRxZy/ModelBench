@@ -3,7 +3,7 @@
 #include <QObject>
 #include <QString>
 
-namespace ModelFit {
+namespace ModelBench {
 
 class LocalApiServer : public QObject {
     Q_OBJECT
@@ -21,4 +21,4 @@ private:
     QString m_endpoint;
 };
 
-} // namespace ModelFit
+} // namespace ModelBench

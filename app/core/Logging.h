@@ -2,9 +2,9 @@
 
 #include <QString>
 
-namespace ModelFit::Logging {
+namespace ModelBench::Logging {
 
 void install(const QString &logDir);
 void setLevel(int level);
 
-} // namespace ModelFit::Logging
+} // namespace ModelBench::Logging

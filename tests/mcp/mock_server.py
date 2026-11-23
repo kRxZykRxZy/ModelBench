@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Mock stdio MCP server for testing ModelFit's MCPClient.
+"""Mock stdio MCP server for testing ModelBench's MCPClient.
 
 Implements: initialize, notifications/initialized, tools/list, tools/call,
 resources/list, resources/read, prompts/list, prompts/get, ping.

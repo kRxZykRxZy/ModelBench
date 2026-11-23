@@ -7,7 +7,7 @@
 #include <QJsonArray>
 #include <QJsonObject>
 
-namespace ModelFit {
+namespace ModelBench {
 
 HuggingFaceClient::HuggingFaceClient(QObject *parent) : QObject(parent) {}
 
@@ -15,7 +15,7 @@ void HuggingFaceClient::setToken(const QString &token) { m_token = token; }
 
 QNetworkRequest HuggingFaceClient::makeRequest(const QString &url) const {
     QNetworkRequest req{QUrl(url)};
-    req.setHeader(QNetworkRequest::UserAgentHeader, "ModelFit/0.1");
+    req.setHeader(QNetworkRequest::UserAgentHeader, "ModelBench/0.1");
     req.setRawHeader("Accept", "application/json");
     if (!m_token.isEmpty()) req.setRawHeader("Authorization", ("Bearer " + m_token).toUtf8());
     return req;
@@ -81,4 +81,4 @@ void HuggingFaceClient::fetchModelFiles(const QString &repoId) {
     });
 }
 
-} // namespace ModelFit
+} // namespace ModelBench

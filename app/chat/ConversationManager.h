@@ -5,7 +5,7 @@
 #include <QList>
 #include <QVariantMap>
 
-namespace ModelFit {
+namespace ModelBench {
 
 struct ChatMessage {
     QString id;
@@ -35,6 +35,6 @@ private:
     QList<Conv> m_convs;
 };
 
-} // namespace ModelFit
+} // namespace ModelBench
 
-Q_DECLARE_METATYPE(ModelFit::ChatMessage)
+Q_DECLARE_METATYPE(ModelBench::ChatMessage)

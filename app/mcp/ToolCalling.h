@@ -7,7 +7,7 @@
 #include <QDateTime>
 #include <QString>
 
-namespace ModelFit {
+namespace ModelBench {
 
 class MCPClient;
 
@@ -86,6 +86,6 @@ private:
     qint64 m_maxOutputBytes = 1024 * 1024; // 1 MiB
 };
 
-} // namespace ModelFit
+} // namespace ModelBench
 
-Q_DECLARE_METATYPE(ModelFit::ToolCallResult)
+Q_DECLARE_METATYPE(ModelBench::ToolCallResult)

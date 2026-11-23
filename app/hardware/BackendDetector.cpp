@@ -13,7 +13,7 @@
 #include <ggml-backend.h>
 #endif
 
-namespace ModelFit {
+namespace ModelBench {
 
 namespace {
 
@@ -292,4 +292,4 @@ QJsonObject BackendDetector::toJson(const QList<BackendAvailability> &backends)
     return root;
 }
 
-} // namespace ModelFit
+} // namespace ModelBench

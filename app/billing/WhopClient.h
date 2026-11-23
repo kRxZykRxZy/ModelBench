@@ -4,7 +4,7 @@
 #include <QString>
 #include <QJsonObject>
 
-namespace ModelFit {
+namespace ModelBench {
 
 class WhopClient : public QObject {
     Q_OBJECT
@@ -24,4 +24,4 @@ private:
     QString m_backendBaseUrl;
 };
 
-} // namespace ModelFit
+} // namespace ModelBench

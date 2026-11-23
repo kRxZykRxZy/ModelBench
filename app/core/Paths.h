@@ -2,7 +2,7 @@
 
 #include <QString>
 
-namespace ModelFit::Paths {
+namespace ModelBench::Paths {
 
 QString dataDirectory();
 QString modelsDirectory();
@@ -11,4 +11,4 @@ QString tempDirectory();
 QString databasePath();
 QString configPath();
 
-} // namespace ModelFit::Paths
+} // namespace ModelBench::Paths

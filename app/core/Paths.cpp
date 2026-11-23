@@ -4,7 +4,7 @@
 #include <QDir>
 #include <QCoreApplication>
 
-namespace ModelFit::Paths {
+namespace ModelBench::Paths {
 
 static QString base() {
     QString base = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
@@ -19,4 +19,4 @@ QString tempDirectory() { return QStandardPaths::writableLocation(QStandardPaths
 QString databasePath() { return base() + "/modelfit.db"; }
 QString configPath() { return base() + "/config.json"; }
 
-} // namespace ModelFit::Paths
+} // namespace ModelBench::Paths
