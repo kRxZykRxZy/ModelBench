@@ -4,6 +4,7 @@
 #include <QQuickStyle>
 
 #include "Application.h"
+#include "core/Navigation.h"
 
 int main(int argc, char *argv[])
 {
@@ -18,7 +19,10 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    ModelBench::Navigation navigation;
+
     QQmlApplicationEngine engine;
+    engine.rootContext()->setContextProperty("Navigation", &navigation);
     core.registerQmlTypes(engine);
 
     const QUrl url(QStringLiteral("qrc:/ModelBench/app/ui/Main.qml"));

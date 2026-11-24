@@ -39,6 +39,7 @@ set(MODELFIT_SOURCES
     app/core/Logging.cpp
     app/core/PathSecurity.cpp
     app/core/Theme.cpp
+    app/core/Navigation.cpp
     app/core/AccountManager.cpp
     app/core/Updater.cpp
     app/storage/Database.cpp
@@ -88,6 +89,7 @@ set(MODELFIT_HEADERS
     app/core/Logging.h
     app/core/PathSecurity.h
     app/core/Theme.h
+    app/core/Navigation.h
     app/core/AccountManager.h
     app/core/Updater.h
     app/storage/Database.h
@@ -171,13 +173,10 @@ if(MODELFIT_ENABLE_LLAMA_CPP)
     endif()
 endif()
 
-set_source_files_properties(app/ui/Navigation.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
-
 qt_add_qml_module(ModelBench
     URI ModelBench
     VERSION 1.0
     QML_FILES
-        app/ui/Navigation.qml
         app/ui/Main.qml
         app/ui/Sidebar.qml
         app/ui/HeaderBar.qml
