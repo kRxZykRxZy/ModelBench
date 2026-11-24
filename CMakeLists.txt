@@ -198,6 +198,11 @@ qt_add_qml_module(ModelBench
 
 install(TARGETS ModelBench RUNTIME DESTINATION bin)
 
+# Avoid QML module directory name collision with executable output (macOS/Linux).
+set_target_properties(ModelBench PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+)
+
 # ---- Packaging (CPack) ----
 set(CPACK_PACKAGE_NAME "ModelBench")
 set(CPACK_PACKAGE_VENDOR "ModelBench")
