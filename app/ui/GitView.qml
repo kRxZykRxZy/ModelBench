@@ -74,7 +74,7 @@ Item {
                 ComboBox {
                     id: branchCombo
                     model: root.branches
-                    currentText: root.currentBranch
+                    currentIndex: root.branches.indexOf(root.currentBranch)
                     width: 160
                     onActivated: root.currentBranch = branchCombo.currentText
                 }
@@ -300,7 +300,8 @@ Item {
                         text: "Commit"
                         font.pixelSize: Theme.fontSizeSm
                         enabled: root.commitMessage.trim().length > 0
-                        color: Theme.accent
+                        palette.button: Theme.accent
+                        palette.buttonText: "white"
                         onClicked: {
                             // TODO(agent-1): git.commit(root.commitMessage, root.commitDescription)
                             root.commitMessage = ""
