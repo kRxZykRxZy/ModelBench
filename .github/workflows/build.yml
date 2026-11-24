@@ -18,10 +18,16 @@ jobs:
         run: pip install aqtinstall
       - name: Install Qt
         run: aqt install-qt windows desktop 6.8.3 win64_mingw -O C:\Qt
+      - name: Install MinGW 13.1.0 toolchain (matches Qt 6.8.3)
+        run: aqt install-tool windows desktop tools_mingw1310 -O C:\
       - name: Configure
-        run: cmake --preset windows-mingw-debug -DCMAKE_PREFIX_PATH=C:/Qt/6.8.3/mingw_64
+        run: |
+          $env:PATH = "C:\Tools\mingw1310_64\bin;$env:PATH"
+          cmake --preset windows-mingw-debug -DCMAKE_PREFIX_PATH=C:/Qt/6.8.3/mingw_64
       - name: Build
-        run: cmake --build --preset windows-mingw-debug -j 4
+        run: |
+          $env:PATH = "C:\Tools\mingw1310_64\bin;$env:PATH"
+          cmake --build --preset windows-mingw-debug -j 4
       - name: Deploy Qt (bundle DLLs)
         run: |
           cd build/windows-mingw-debug/bin
