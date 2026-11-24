@@ -80,7 +80,8 @@ Item {
                     Button {
                         Layout.fillWidth: true
                         text: root.lowBalance ? "Upgrade now" : "View plans"
-                        color: Theme.accent
+                        palette.button: Theme.accent
+                        palette.buttonText: "white"
                         onClicked: Navigation.go("subscription")
                     }
                 }

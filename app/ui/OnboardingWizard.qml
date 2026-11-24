@@ -201,7 +201,8 @@ Item {
                     Text { text: "Start a new chat or explore the Model Library."; color: Theme.textMuted; font.pixelSize: Theme.fontSizeSm; wrapMode: Text.Wrap; horizontalAlignment: Text.AlignHCenter; width: 340; Layout.alignment: Qt.AlignHCenter }
                     Button {
                         text: "Finish"
-                        color: Theme.accent
+                        palette.button: Theme.accent
+                        palette.buttonText: "white"
                         font.bold: true
                         onClicked: root.finished()
                     }
@@ -223,7 +224,8 @@ Item {
             Item { Layout.fillWidth: true }
             Button {
                 text: root.currentStep === root.stepCount - 1 ? "Finish" : "Next"
-                color: Theme.accent
+                palette.button: Theme.accent
+                        palette.buttonText: "white"
                 font.bold: true
                 font.pixelSize: Theme.fontSizeSm
                 onClicked: root.goNext()
