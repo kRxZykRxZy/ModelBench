@@ -162,13 +162,15 @@ Item {
 
                             Button {
                                 text: "Approve"
-                                color: Theme.success
+                                palette.button: Theme.success
+                                palette.buttonText: "white"
                                 font.pixelSize: Theme.fontSizeSm
                                 onClicked: root.approveStep(modelData.id)
                             }
                             Button {
                                 text: "Deny"
-                                color: Theme.danger
+                                palette.button: Theme.danger
+                                palette.buttonText: "white"
                                 font.pixelSize: Theme.fontSizeSm
                                 onClicked: root.denyStep(modelData.id)
                             }
