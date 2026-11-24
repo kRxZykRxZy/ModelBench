@@ -14,8 +14,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Install aqtinstall (pre-release for Qt 6.12 support)
-        run: pip install --pre aqtinstall
+      - name: Install aqtinstall (dev version for Qt 6.12 support)
+        run: pip install aqtinstall==3.3.1.dev180
       - name: Install Qt
         run: aqt install-qt windows desktop 6.12.0 win64_mingw -O C:\Qt
       - name: Configure
@@ -52,8 +52,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Install aqtinstall (pre-release for Qt 6.12 support)
-        run: pip install --pre aqtinstall
+      - name: Install aqtinstall (dev version for Qt 6.12 support)
+        run: pip install aqtinstall==3.3.1.dev180
       - name: Install Qt
         run: sudo aqt install-qt mac desktop 6.12.0 clang_64 -O /opt/Qt
       - name: Configure
