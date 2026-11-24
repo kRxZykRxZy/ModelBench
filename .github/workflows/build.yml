@@ -14,18 +14,20 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Install aqtinstall (dev version for Qt 6.12 support)
-        run: pip install aqtinstall==3.3.1.dev180
-      - name: Install Qt
-        run: aqt install-qt windows desktop 6.12.0 win64_mingw -O C:\Qt
+      - uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.12.0'
+          host: 'windows'
+          target: 'desktop'
+          arch: 'win64_mingw'
       - name: Configure
-        run: cmake --preset windows-mingw-debug -DCMAKE_PREFIX_PATH=C:/Qt/6.12.0/mingw_64
+        run: cmake --preset windows-mingw-debug
       - name: Build
         run: cmake --build --preset windows-mingw-debug -j 4
       - name: Deploy Qt (bundle DLLs)
         run: |
           cd build/windows-mingw-debug
-          C:\Qt\6.12.0\mingw_64\bin\windeployqt.exe --release --no-translations --no-system-d3d-compiler --no-opengl-sw --no-compiler-runtime ModelBench.exe
+          windeployqt --release --no-translations --no-system-d3d-compiler --no-opengl-sw --no-compiler-runtime ModelBench.exe
       - name: Upload ModelBench (self-contained)
         uses: actions/upload-artifact@v4
         with:
@@ -52,18 +54,20 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Install aqtinstall (dev version for Qt 6.12 support)
-        run: pip install aqtinstall==3.3.1.dev180
-      - name: Install Qt
-        run: sudo aqt install-qt mac desktop 6.12.0 clang_64 -O /opt/Qt
+      - uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.12.0'
+          host: 'mac'
+          target: 'desktop'
+          arch: 'clang_64'
       - name: Configure
-        run: cmake --preset macos-arm64 -DCMAKE_PREFIX_PATH=/opt/Qt/6.12.0/macos
+        run: cmake --preset macos-arm64
       - name: Build
         run: cmake --build --preset macos-arm64 -j 4
       - name: Deploy Qt (bundle frameworks)
         run: |
           cd build/macos-arm64
-          /opt/Qt/6.12.0/macos/bin/macdeployqt ModelBench.app
+          macdeployqt ModelBench.app
       - name: Upload ModelBench macOS
         uses: actions/upload-artifact@v4
         with:
