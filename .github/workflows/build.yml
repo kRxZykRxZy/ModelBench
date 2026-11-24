@@ -21,12 +21,27 @@ jobs:
       - name: Configure
         run: cmake --preset windows-mingw-debug -DCMAKE_PREFIX_PATH=C:/Qt/6.8.3/mingw_64
       - name: Build
-        run: cmake --build --preset windows-mingw-debug
-      - name: Upload ModelBench.exe
+        run: cmake --build --preset windows-mingw-debug -j 4
+      - name: Deploy Qt (bundle DLLs)
+        run: |
+          cd build/windows-mingw-debug
+          C:\Qt\6.8.3\mingw_64\bin\windeployqt.exe --release --no-translations --no-system-d3d-compiler --no-opengl-sw --no-compiler-runtime ModelBench.exe
+      - name: Upload ModelBench (self-contained)
         uses: actions/upload-artifact@v4
         with:
           name: ModelBench-windows
-          path: build/windows-mingw-debug/ModelBench.exe
+          path: |
+            build/windows-mingw-debug/ModelBench.exe
+            build/windows-mingw-debug/*.dll
+            build/windows-mingw-debug/*.qml
+            build/windows-mingw-debug/platforms/
+            build/windows-mingw-debug/imageformats/
+            build/windows-mingw-debug/iconengines/
+            build/windows-mingw-debug/styles/
+            build/windows-mingw-debug/sqldrivers/
+            build/windows-mingw-debug/networkinformation/
+            build/windows-mingw-debug/tls/
+            build/windows-mingw-debug/qml/
           if-no-files-found: error
 
   macos-arm64:
@@ -44,7 +59,11 @@ jobs:
       - name: Configure
         run: cmake --preset macos-arm64 -DCMAKE_PREFIX_PATH=/opt/Qt/6.8.3/macos
       - name: Build
-        run: cmake --build --preset macos-arm64
+        run: cmake --build --preset macos-arm64 -j 4
+      - name: Deploy Qt (bundle frameworks)
+        run: |
+          cd build/macos-arm64
+          /opt/Qt/6.8.3/macos/bin/macdeployqt ModelBench.app
       - name: Upload ModelBench macOS
         uses: actions/upload-artifact@v4
         with:
