@@ -171,6 +171,8 @@ if(MODELFIT_ENABLE_LLAMA_CPP)
     endif()
 endif()
 
+set_source_files_properties(app/ui/Navigation.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
+
 qt_add_qml_module(ModelBench
     URI ModelBench
     VERSION 1.0
