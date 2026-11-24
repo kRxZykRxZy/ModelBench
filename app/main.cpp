@@ -1,4 +1,4 @@
-#include <QApplication>
+#include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QIcon>
 #include <QQuickStyle>
@@ -7,9 +7,7 @@
 
 int main(int argc, char *argv[])
 {
-    QQuickStyle::setStyle("Basic");
-
-    QApplication app(argc, argv);
+    QGuiApplication app(argc, argv);
     app.setApplicationName("ModelBench");
     app.setApplicationVersion("0.1.0");
     app.setOrganizationName("ModelBench");
