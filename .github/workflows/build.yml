@@ -20,6 +20,7 @@ jobs:
           host: 'windows'
           target: 'desktop'
           arch: 'win64_mingw'
+          setup-python: false
       - name: Configure
         run: cmake --preset windows-mingw-debug
       - name: Build
@@ -60,6 +61,7 @@ jobs:
           host: 'mac'
           target: 'desktop'
           arch: 'clang_64'
+          setup-python: false
       - name: Configure
         run: cmake --preset macos-arm64
       - name: Build
