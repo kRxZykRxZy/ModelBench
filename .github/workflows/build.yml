@@ -23,7 +23,7 @@ jobs:
       - name: Configure
         run: |
           $env:PATH = "C:\Tools\mingw1310_64\bin;$env:PATH"
-          cmake --preset windows-mingw-debug -DCMAKE_PREFIX_PATH=C:/Qt/6.8.3/mingw_64
+          cmake --preset windows-mingw-debug -DCMAKE_PREFIX_PATH=C:/Qt/6.8.3/mingw_64 -DMODELFIT_ENABLE_LLAMA_CPP=ON
       - name: Build
         run: |
           $env:PATH = "C:\Tools\mingw1310_64\bin;$env:PATH"
@@ -53,7 +53,7 @@ jobs:
       - name: Install Qt
         run: sudo aqt install-qt mac desktop 6.8.3 clang_64 -O /opt/Qt
       - name: Configure
-        run: cmake --preset macos-arm64 -DCMAKE_PREFIX_PATH=/opt/Qt/6.8.3/macos
+        run: cmake --preset macos-arm64 -DCMAKE_PREFIX_PATH=/opt/Qt/6.8.3/macos -DMODELFIT_ENABLE_LLAMA_CPP=ON
       - name: Build
         run: cmake --build --preset macos-arm64 -j 4
       - name: Deploy Qt (bundle frameworks)
